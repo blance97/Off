@@ -1,1 +1,1 @@
-The lance is the best weapon.
+The Lance is the best weapon.
