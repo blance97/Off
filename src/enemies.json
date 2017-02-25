@@ -29,90 +29,142 @@
             "power": 6
         }
     ],
-    "regular":[
-        {
-            "name": "Ogre",
-            "power": 5
-        },
-        {
-            "name": "Cave Troll",
-            "power": 3
-        },
-        {
-            "name": "Fire Dragon",
-            "power": 10
-        },
-        {
-            "name": "Theif",
-            "power": 2
-        },
-        {
-            "name": "Bridge Troll",
-            "power": 3
-        },
-        {
-            "name": "Demon",
-            "power": 6
-        },
-        {
-            "name": "Giant",
-            "power": 7
-        },
-        {
-            "name": "Giant Spider",
-            "power": 1
-        },
-        {
-            "name": "Spellcaster",
-            "power": 4
-        },
-        {
-            "name": "Skeletons",
-            "power": 2
-        },
-        {
-            "name": "Wolf",
-            "power": 1
-        },
-        {
-            "name": "Werewolf",
-            "power": 4
-        },
-        {
-            "name":"Lich",
-            "power": 10
-        },
-        {
-            "name":"Hydra",
-            "power": 7
-        },
-        {
-            "name": "Berserker",
-            "power": 4
-        },
-        {
-            "name": "Dark Elf",
-            "power": 7
-        },
-        {
-            "name": "Zombie",
-            "power": 1
-        },
-        {
-            "name": "Ghost",
-            "power": 1
-        },
-        {
-            "name":"Bat",
-            "power": 1
-        },
-        {
-            "name": "Giant Rat",
-            "power": 2
-        },
-        {
-            "name": "Warlock",
-            "power": 8
-        }
-    ]
+    "regular":{
+        "1":[
+            {
+                "name":"Bat",
+                "power": 1
+            },
+            {
+                "name": "Tiny Spider",
+                "power": 1
+            },
+            {
+                "name": "Mouse",
+                "power": 1
+            },
+            {
+                "name": "Stray dog",
+                "power": 1
+            }   
+        ],
+        "2":[
+            {
+                "name": "Thief",
+                "power": 2
+            },
+            {
+                "name": "Giant Spider",
+                "power": 2
+            },
+            {
+                "name": "Skeletons",
+                "power": 2
+            },
+            {
+                "name": "Giant Rat",
+                "power": 2
+            },
+            {
+                "name": "Goblin",
+                "power": 2
+            }
+        ],
+        "3":[
+            {
+                "name": "Cave Troll",
+                "power": 3
+            },
+            {
+                "name": "Bridge Troll",
+                "power": 3
+            },
+            {
+                "name": "Wolf",
+                "power": 3
+            },
+            {
+                "name": "Zombie",
+                "power": 3
+            }
+        ],
+        "4":[
+            {
+                "name": "Ghost",
+                "power": 4
+            },
+            {
+                "name": "Berserker",
+                "power": 4
+            }
+        ],
+        "5":[
+            {
+                "name": "Ogre",
+                "power": 5
+            },
+            {
+                "name": "Dire bear",
+                "power": 5
+            }
+        ],
+        "6":[
+            {
+                "name": "Demon",
+                "power": 6
+            },
+            {
+                "name": "Werewolf",
+                "power": 6
+            },
+            {
+                "name": "Spellcaster",
+                "power": 6
+            }
+        ],
+        "7":[
+            {
+                "name": "Giant",
+                "power": 7
+            },
+            {
+                "name":"Hydra",
+                "power": 7
+            },
+            {
+                "name": "Dark Elf",
+                "power": 7
+            }
+        ],
+        "8":[
+            {
+                "name": "Warlock",
+                "power": 8
+            },
+            {
+                "name": "Cockatrice",
+                "power": 8
+            }
+        ],
+        "9":[
+            {
+                "name": "Basilisk",
+                "power": 9
+            },
+            {
+                "name": "Wyvern",
+                "power": 9
+            }
+        ],
+        "10":[
+            {
+                "name": "Fire Dragon",
+                "power": 10
+            },
+            {
+                "name":"Lich",
+                "power": 10
+            }
+        ]
+    }
   }
