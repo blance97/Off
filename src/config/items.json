@@ -1,12 +1,23 @@
 {
     "Weapons": [
+
         {
-            "name": "Rocket Launcher",
-            "power": 10,
-            "min":5,
-            "max":36,
-            "crit":0,
-            "mod":1
+           "Fists":{
+               "power": 0,
+                "min":0,
+                "max":1,
+                "crit":0.05,
+                "mod":1
+                }
+        },
+        {
+            "Rocket Launcher":{
+                "power": 10,
+                "min":5,
+                "max":36,
+                "crit":0,
+                "mod":1
+            }
         },
         {
             "name": "Spear",
@@ -171,8 +182,9 @@
     ],
     "Armor": [
         {
-            "name": "Naked",
-            "defense": 0
+            "Naked":{
+                "defense": 0
+            }
         },
         {
             "name": "Leather",

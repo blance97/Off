@@ -31,7 +31,7 @@ def handle_command(command, channel, user):
                "* command with numbers, delimited by spaces."
     if command.startswith("newchar"):
         name = command.split(" ")[1]
-        data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'stage':0, 'location':'Dire Village'}, 'Armor': {'arm': 'naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'fists'}}    
+        data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village'}, 'Armor': {'arm': 'Naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'Fists'}}    
         result = firebase.put('/Characters',user,data)
         response = "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
     elif command.startswith("allocate"):
@@ -47,7 +47,7 @@ def handle_command(command, channel, user):
             data = {attr:points, 'AllocationPoints':curPoints-points}
             firebase.patch('/Characters/'+user+'/Attributes',data)
             response = "You allocated " + str(points) + " to " + attr + "."
-    elif command.startswith("attributes"):
+    elif command.startswith("stats"):
         attributes = firebase.get('/Characters/'+user+'/Attributes',None)
         name = firebase.get('/Characters/'+user+'/Name',None)
         print(attributes.get('strength'))
@@ -63,26 +63,44 @@ def handle_command(command, channel, user):
             response="You're on an adventure near the town of " + location
         else:
             response = "You're in the town of "+location
-    elif command.startswith("fight"):
+    elif command.startswith("adventure"):
         meta = firebase.get('/Characters/'+user+'/Meta', None)
-        level = int(meta.get('level'))
-        village = meta.get('location')
-        weights = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
-        rng = random.randint(1,weights[level-1])
-        mlvl = 0
-        for i in range(0,10):
-            if rng <= weights[i]:
-                mlvl=i+1
-                break
-        with open('enemies.json') as data_file:    
-            monsters = json.load(data_file)[village][(str(mlvl))]
-        rng = random.randint(0,len(monsters)-1)
-        response = "Monster: " + monsters[rng]["name"]
+        stage = meta.get('stage')
+
+        if stage == 0:
+            chanceOfNothing = 15
+            rng = random.randint(0,100)
+            if rng <= chanceOfNothing:
+                #########
+                # Add flavor text stuff
+                #########
+                response = "Nothing happens"
+            else:
+                level = int(meta.get('level'))
+                village = meta.get('location')
+                monster = get_encounter(level,village)
+                data = {'battle':monster, 'enemyHp':monster['health']}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health."
+
     elif user == 'U4AD0NJ8L':
         response = "Lance stop being a fucking faggot"
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
+
+def get_encounter(level, village):
+    weights = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+    rng = random.randint(1,weights[level-1])
+    mlvl = 0
+    for i in range(0,10):
+        if rng <= weights[i]:
+            mlvl=i+1
+            break
+    with open('config/enemies.json') as data_file:    
+        monsters = json.load(data_file)[village][(str(mlvl))]
+    rng = random.randint(0,len(monsters)-1)
+    return monsters[rng]
 
 def parse_slack_output(slack_rtm_output):
     """
