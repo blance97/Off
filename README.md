@@ -54,4 +54,9 @@ export SLACK_BOT_TOKEN='xoxb-146341984755-1fYi3Oau3Cx262xcxP3Tzzp0'
   </code>
   This will return the amount of money you currently have in your inventory.
 </li>
+<li>allocate:><code>
+  @Bot allocate attribute numPoints
+  </code>
+  This will allocate the specified number of allocation points to the attribute.
+</li>
 </ul>
