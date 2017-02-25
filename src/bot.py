@@ -3,12 +3,15 @@ import time
 import json
 import random
 import math
+import markovify
 from slackclient import SlackClient
 from firebase import firebase
 
 firebase = firebase.FirebaseApplication('https://slackbotadventures.firebaseio.com/', None)
+with open("output.txt") as f:
+    text = f.read()
 
-
+text_model = markovify.Text(text)
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 BOT_ID = 'U4AA1UYN7'
@@ -19,7 +22,7 @@ EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-slack_client = SlackClient('xoxb-146341984755-iSkNDwRRKTFM4S4a78YjCkSk')
+slack_client = SlackClient('xoxb-146341984755-6EgyTQ7vGINxF4b02J4gsUsx')
 
 
 def handle_command(command, channel, user):
@@ -32,6 +35,79 @@ def handle_command(command, channel, user):
                "* command with numbers, delimited by spaces."
     if command.startswith("newchar"):
         response = new_user(command.split(" ")[1],user)
+    elif command.startswith("tradelist"):
+        if firebase.get('/Characters/'+ user + '/Meta/trader', None) == "general manager":
+            with open('config/items.json') as itemf:
+                item = json.load(itemf)
+            pot = item.get("Potions")
+            response = "/*******************TRADE LIST*********************"
+            for pots in pot:
+                response += "\n*" +pots.get("name") + "*-------------"+str(pots.get("saleCost"))
+            response += "\nYou have $$$" + str(firebase.get('/Characters/'+user+'/Meta/money', None)) + " *cash DOLLA*"
+        else:
+            response = firebase.get('/Characters/'+ user + 'Meta/trader', None)
+    elif command.startswith("buy"):
+        stuff = command.split(' ')
+        if firebase.get('/Characters/'+ user + '/Meta/trader', None) == "general manager":
+            with open('config/items.json') as itemf:
+                item = json.load(itemf)
+            pot = item.get("Potions")
+            response = "/*******************TRADE LIST*********************"
+            count = 0
+            parsed = ""
+            for stuffs in stuff:
+                if count > 0:
+                    parsed += stuffs + " "
+                count += 1
+            parsed = parsed.strip()
+            for pots in pot:
+                print(pots.get("name"))
+                print(parsed)
+                if str.lower(pots.get("name")) == str.lower(parsed):
+                    print("dank weed")
+                    line = "None"
+                    while not line or line == "None":
+                        line = text_model.make_sentence()
+                    money = firebase.get('/Characters/'+user+'/Meta/money', None) - pots.get("saleCost")
+                    if money > 0:
+                        firebase.patch('/Characters/'+user+'/Meta/', {"money": money})
+                        ite = firebase.get('/Characters/'+user+'/Inventory/', None)
+                        if ite.get(parsed):
+                            firebase.patch('/Characters/'+user+'/Inventory/', {parsed: ite.get(parsed)+1})
+                        else:
+                            firebase.put('/Characters/'+user+'/Inventory/', parsed, 1)
+                        response = "You now have " + str(money)+" *CASHDOLLA*\nTrader: " + line
+                    else:
+                        response = "Trader: You don't have enough money you dumb fuck. " + line
+        else:
+            response = firebase.get('/Characters/'+ user + 'Meta/trader', None)
+    elif command.startswith("drink"):
+        stuff = command.split(" ")
+        count = 0
+        parsed = ""
+        for stuffs in stuff:
+            if count > 0:
+                parsed += stuffs + " "
+            count += 1
+        parsed = parsed.strip() 
+        num = firebase.get('/Characters/' + user + '/Inventory/' + parsed, None) 
+        if num > 0:
+            firebase.patch('/Characters/'+user+'/Inventory/', {parsed: num-1})
+            health = firebase.get('/Characters/'+user+'/Attributes/health', None)
+            maxhealth = firebase.get('/Characters/'+user+'/Attributes/maxhp', None)
+            with open('config/items.json') as itemf:
+                item = json.load(itemf)
+            pot = item.get("Potions")
+            for pots in pot:
+                if str.lower(pots.get("name")) == str.lower(parsed):
+                    health += pots.get("power")
+                    if health > maxhealth:
+                        firebase.patch('/Characters/'+user+'/Attributes/', {"health": maxhealth})
+                    else:
+                        firebase.patch('/Characters/'+user+'/Attributes/', {"health": health})
+            response = "You have drunk pot"
+        else:
+            response = "You ate soylent"
     elif command.startswith("allocate"):
         stuff = command.split(" ")
         attr = stuff[1]
@@ -52,6 +128,8 @@ def handle_command(command, channel, user):
     elif command.startswith("money"):
         money = firebase.get('/Characters/'+user+'/Meta/money',None)
         response = "You have "+str(money)+" gold."
+    elif command.startswith("help"):
+        response = "/***********************************************************\n The commands: \n  adventure--- Starts a new adventure \n allocate--- spend attribute points on skils \n stats--- lists current attribute points an other character data \n money--- lists the amount of money you have \n whereami--- prints out the current location of character \n flee--- run from adventure \n attack--- attacks when on adventure"
     elif command.startswith("whereami"):
         meta = firebase.get('/Characters/'+user+'/Meta',None)
         location = meta.get('location')
@@ -133,17 +211,17 @@ def handle_command(command, channel, user):
                     #Beat stage 1
                     data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
                     firebase.patch('/Characters/'+user+'/Meta',data)
-                    response = "You killed the " + monster.get('name') +"! "+ response + " Continue your adventure by saying 'adventure'"
+                    response = "You dealt " +heroDmg+ " damage and killed the " + monster.get('name') +"! You are currently at "+health + " health. "+ response + " Continue your adventure by saying 'adventure'"
                 elif stage == 2:
                     #Beat stage 2
                     data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':3}
                     firebase.patch('/Characters/'+user+'/Meta',data)
-                    response = "You killed the " + monster.get('name') +"! "+ response + " Continue your adventure by saying 'adventure'"
+                    response = "You dealt " +heroDmg+ " damage and killed the " + monster.get('name') +"! You are currently at "+health + " health. "+ response + " Continue your adventure by saying 'adventure'"
                 else:
                     #Beat the boss
                     data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
                     firebase.patch('/Characters/'+user+'/Meta',data)
-                    response = "You beat " + monster.get('name') +"! "+ response
+                    response = "You dealt "+heroDmg+" and beat " + monster.get('name') +"You are currently at "+health + " health. "+ response
                     #####
                     #Find new town
                     #####
@@ -172,17 +250,17 @@ def handle_command(command, channel, user):
                         #Beat stage 1
                         data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
                         firebase.patch('/Characters/'+user+'/Meta',data)
-                        response =  "You killed the " + monster.get('name') +"! "+ response + "Continue your adventure by saying 'adventure'"
+                        response = "You dealt " +heroDmg+ " damage and killed the " + monster.get('name') +"! You are currently at "+health + " health. "+ response + " Continue your adventure by saying 'adventure'"
                     elif stage == 2:
                         #Beat stage 2
                         data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':3}
                         firebase.patch('/Characters/'+user+'/Meta',data)
-                        response = "You killed the " + monster.get('name') +"! "+ response + " Continue your adventure by saying 'adventure'"
+                        response = "You dealt " +heroDmg+ " damage and killed the " + monster.get('name') +"! You are currently at "+health + " health. "+ response + " Continue your adventure by saying 'adventure'"
                     else:
                         #Beat the boss
                         data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
                         firebase.patch('/Characters/'+user+'/Meta',data)
-                        response = "You beat " + monster.get('name') +"! "+ response
+                        response = "You dealt "+heroDmg+" and beat " + monster.get('name') +"You are currently at "+health + " health. "+ response
                         #####
                         #Find new town
                         #####
@@ -242,7 +320,7 @@ def gen_loot(stage,user):
             return "You found a "+item.get('name')+"!"
 
 def new_user(name, user):
-    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village'}, 'armor': 'naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5, 'maxhp':10}, 'Inventory': {'soylent': 1}, 'weapon': 'fists'}    
+    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village','trader': 'general manager'}, 'armor': 'naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5, 'maxhp':10}, 'Inventory': {'soylent': 1}, 'weapon': 'fists'}    
     result = firebase.put('/Characters',user,data)
     return "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
 
