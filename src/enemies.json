@@ -33,137 +33,282 @@
         "1":[
             {
                 "name":"Bat",
-                "power": 1
+                "power": 1,
+                "health": 3,
+                "min":0,
+                "max":2,
+                "crit":0.01,
+                "mod":2
             },
             {
                 "name": "Tiny Spider",
-                "power": 1
+                "power": 1,
+                "health": 2,
+                "min":0,
+                "max":1,
+                "crit":0.01,
+                "mod":2
             },
             {
                 "name": "Mouse",
-                "power": 1
+                "power": 1,
+                "health": 2,
+                "min":0,
+                "max":1,
+                "crit":0.01,
+                "mod":2
             },
             {
                 "name": "Stray dog",
-                "power": 1
+                "power": 1,
+                "health": 4,
+                "min":0,
+                "max":1,
+                "crit":0.01,
+                "mod":2
             }   
         ],
         "2":[
             {
                 "name": "Thief",
-                "power": 2
+                "power": 2,
+                "health": 5,
+                "min":0,
+                "max":2,
+                "crit":0.05,
+                "mod":2
             },
             {
                 "name": "Giant Spider",
-                "power": 2
+                "power": 2,
+                "health": 7,
+                "min":0,
+                "max":1,
+                "crit":0.10,
+                "mod":2
             },
             {
-                "name": "Skeletons",
-                "power": 2
+                "name": "Skeleton",
+                "power": 2,
+                "health": 4,
+                "min":0,
+                "max":3,
+                "crit":0.03,
+                "mod":2
             },
             {
                 "name": "Giant Rat",
-                "power": 2
+                "power": 2,
+                "health": 4,
+                "min":0,
+                "max":2,
+                "crit":0.05,
+                "mod":2
             },
             {
                 "name": "Goblin",
-                "power": 2
+                "power": 2,
+                "health": 5,
+                "min":0,
+                "max":2,
+                "crit":0.15,
+                "mod":2
             }
         ],
         "3":[
             {
                 "name": "Cave Troll",
-                "power": 3
+                "power": 3,
+                "health": 7,
+                "min":0,
+                "max":1,
+                "crit":1,
+                "mod":4
             },
             {
                 "name": "Bridge Troll",
-                "power": 3
+                "power": 3,
+                "health": 9,
+                "min":0,
+                "max":1,
+                "crit":1,
+                "mod":3
             },
             {
                 "name": "Wolf",
-                "power": 3
+                "power": 3,
+                "health": 6,
+                "min":0,
+                "max":3,
+                "crit":0.1,
+                "mod":2
             },
             {
                 "name": "Zombie",
-                "power": 3
+                "power": 3,
+                "health": 7,
+                "min":0,
+                "max":4,
+                "crit":0.05,
+                "mod":2
             }
         ],
         "4":[
             {
                 "name": "Ghost",
-                "power": 4
+                "power": 4,
+                "health": 15,
+                "min":0,
+                "max":2,
+                "crit":0.05,
+                "mod":2
             },
             {
                 "name": "Berserker",
-                "power": 4
+                "power": 4,
+                "health": 9,
+                "min":0,
+                "max":3,
+                "crit":0.25,
+                "mod":3
             }
         ],
         "5":[
             {
                 "name": "Ogre",
-                "power": 5
+                "power": 5,
+                "health": 14,
+                "min":0,
+                "max":1,
+                "crit":1,
+                "mod":5
             },
             {
                 "name": "Dire bear",
-                "power": 5
+                "power": 5,
+                "health": 15,
+                "min":0,
+                "max":4,
+                "crit":0.5,
+                "mod":2
             }
         ],
         "6":[
             {
                 "name": "Demon",
-                "power": 6
+                "power": 6,
+                "health": 15,
+                "min":1,
+                "max":5,
+                "crit":0.15,
+                "mod":2
             },
             {
                 "name": "Werewolf",
-                "power": 6
+                "power": 6,
+                "health": 17,
+                "min":0,
+                "max":4,
+                "crit":0.3,
+                "mod":2
             },
             {
                 "name": "Spellcaster",
-                "power": 6
+                "power": 6,
+                "health": 10,
+                "min":3,
+                "max":4,
+                "crit":0,
+                "mod":2
             }
         ],
         "7":[
             {
                 "name": "Giant",
-                "power": 7
+                "power": 7,
+                "health": 20,
+                "min":0,
+                "max":1,
+                "crit":1,
+                "mod":7
             },
             {
                 "name":"Hydra",
-                "power": 7
+                "power": 7,
+                "health": 15,
+                "min":1,
+                "max":6,
+                "crit":0.05,
+                "mod":2
             },
             {
                 "name": "Dark Elf",
-                "power": 7
+                "power": 7,
+                "health": 12,
+                "min":2,
+                "max":6,
+                "crit":0.05,
+                "mod":2
             }
         ],
         "8":[
             {
                 "name": "Warlock",
-                "power": 8
+                "power": 8,
+                "health": 14,
+                "min":5,
+                "max":7,
+                "crit":0,
+                "mod":2
             },
             {
                 "name": "Cockatrice",
-                "power": 8
+                "power": 8,
+                "health": 18,
+                "min":0,
+                "max":9,
+                "crit":0.1,
+                "mod":2
             }
         ],
         "9":[
             {
                 "name": "Basilisk",
-                "power": 9
+                "power": 9,
+                "health": 16,
+                "min":0,
+                "max":1,
+                "crit":1,
+                "mod":10
             },
             {
                 "name": "Wyvern",
-                "power": 9
+                "power": 9,
+                "health": 25,
+                "min":3,
+                "max":10,
+                "crit":0.07,
+                "mod":2
             }
         ],
         "10":[
             {
                 "name": "Fire Dragon",
-                "power": 10
+                "power": 10,
+                "health": 30,
+                "min":5,
+                "max":9,
+                "crit":0.1,
+                "mod":2
             },
             {
                 "name":"Lich",
-                "power": 10
+                "power": 10,
+                "health": 28,
+                "min":2,
+                "max":12,
+                "crit":0.05,
+                "mod":2
             }
         ]
     }
