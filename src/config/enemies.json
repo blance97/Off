@@ -197,7 +197,7 @@
             {
                 "name": "Demon",
                 "power": 6,
-                "health": 15,
+                "health": 20,
                 "min":1,
                 "max":5,
                 "crit":0.15,
@@ -206,7 +206,7 @@
             {
                 "name": "Werewolf",
                 "power": 6,
-                "health": 17,
+                "health": 25,
                 "min":0,
                 "max":4,
                 "crit":0.3,
@@ -215,7 +215,7 @@
             {
                 "name": "Spellcaster",
                 "power": 6,
-                "health": 10,
+                "health": 17,
                 "min":3,
                 "max":4,
                 "crit":0,
