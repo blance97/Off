@@ -2,12 +2,15 @@ import os
 import time
 import json
 import random
+import markovify
 from slackclient import SlackClient
 from firebase import firebase
 
 firebase = firebase.FirebaseApplication('https://slackbotadventures.firebaseio.com/', None)
+with open("output.txt") as f:
+    text = f.read()
 
-
+text_model = markovify.Text(text)
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 BOT_ID = 'U4AA1UYN7'
@@ -31,9 +34,84 @@ def handle_command(command, channel, user):
                "* command with numbers, delimited by spaces."
     if command.startswith("newchar"):
         name = command.split(" ")[1]
-        data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village'}, 'Armor': {'arm': 'Naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'Fists'}}    
+        data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village', 'trader': 'general manager'}, 'Armor': {'arm': 'Naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'Fists'}}    
         result = firebase.put('/Characters',user,data)
         response = "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
+    elif command.startswith("tradelist"):
+        if firebase.get('/Characters/'+ user + '/Meta/trader', None) == "general manager":
+            with open('config/items.json') as itemf:
+                item = json.load(itemf)
+            pot = item.get("Potions")
+            response = "/*******************TRADE LIST*********************"
+            for pots in pot:
+                response += "\n*" +pots.get("name") + "*-------------"+str(pots.get("saleCost"))
+            response += "\nYou have $$$" + str(firebase.get('/Characters/'+user+'/Meta/money', None)) + " *cash DOLLA*"
+        else:
+            response = firebase.get('/Characters/'+ user + 'Meta/trader', None)
+    elif command.startswith("buy"):
+        stuff = command.split(' ')
+        if firebase.get('/Characters/'+ user + '/Meta/trader', None) == "general manager":
+            with open('config/items.json') as itemf:
+                item = json.load(itemf)
+            pot = item.get("Potions")
+            response = "/*******************TRADE LIST*********************"
+            count = 0
+            parsed = ""
+            for stuffs in stuff:
+                if count > 0:
+                    parsed += stuffs + " "
+                count += 1
+            parsed = parsed.strip()
+            for pots in pot:
+                print(pots.get("name"))
+                print(parsed)
+                if str.lower(pots.get("name")) == str.lower(parsed):
+                    print("dank weed")
+                    line = "None"
+                    while not line or line == "None":
+                        line = text_model.make_sentence()
+                    money = firebase.get('/Characters/'+user+'/Meta/money', None) - pots.get("saleCost")
+                    if money > 0:
+                        firebase.patch('/Characters/'+user+'/Meta/', {"money": money})
+                        ite = firebase.get('/Characters/'+user+'/Inventory/', None)
+                        if ite.get(parsed):
+                            firebase.patch('/Characters/'+user+'/Inventory/', {parsed: ite.get(parsed)+1})
+                        else:
+                            firebase.put('/Characters/'+user+'/Inventory/', parsed, 1)
+                        response = "You now have " + str(money)+" *CASHDOLLA*\nTrader: " + line
+                    else:
+                        response = "Trader: You don't have enough money you dumb fuck. " + line
+        else:
+            response = firebase.get('/Characters/'+ user + 'Meta/trader', None)
+    elif command.startswith("drink"):
+        stuff = command.split(" ")
+        count = 0
+        parsed = ""
+        for stuffs in stuff:
+            if count > 0:
+                parsed += stuffs + " "
+            count += 1
+        parsed = parsed.strip() 
+        num = firebase.get('/Characters/' + user + '/Inventory/' + parsed, None) 
+        if num > 0:
+            firebase.patch('/Characters/'+user+'/Inventory/', {parsed: num-1})
+            health = firebase.get('/Characters/'+user+'/Attributes/health', None)
+            maxhealth = firebase.get('/Characters/'+user+'/Attributes/maxhp', None)
+            with open('config/items.json') as itemf:
+                item = json.load(itemf)
+            pot = item.get("Potions")
+            for pots in pot:
+                if str.lower(pots.get("name")) == str.lower(parsed):
+                    health += pots.get("power")
+                    if health > maxhealth:
+                        firebase.patch('/Characters/'+user+'/Attributes/', {"health": maxhealth})
+                    else:
+                        firebase.patch('/Characters/'+user+'/Attributes/', {"health": health})
+            response = "You have drunk pot"
+        else:
+            response = "You ate soylent"
+
+
     elif command.startswith("allocate"):
         stuff = command.split(" ")
         attr = stuff[1]
