@@ -4,7 +4,7 @@ from slackclient import SlackClient
 
 BOT_NAME = 'off'
 
-slack_client = SlackClient('xoxb-146341984755-1fYi3Oau3Cx262xcxP3Tzzp0')
+slack_client = SlackClient(Slack Token)
 
 
 if __name__ == "__main__":
