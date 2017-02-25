@@ -2,6 +2,7 @@ import os
 import time
 import json
 import random
+import math
 from slackclient import SlackClient
 from firebase import firebase
 
@@ -30,10 +31,7 @@ def handle_command(command, channel, user):
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
     if command.startswith("newchar"):
-        name = command.split(" ")[1]
-        data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village'}, 'Armor': {'arm': 'Naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'Fists'}}    
-        result = firebase.put('/Characters',user,data)
-        response = "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
+        response = new_user(command.split(" ")[1],user)
     elif command.startswith("allocate"):
         stuff = command.split(" ")
         attr = stuff[1]
@@ -50,7 +48,6 @@ def handle_command(command, channel, user):
     elif command.startswith("stats"):
         attributes = firebase.get('/Characters/'+user+'/Attributes',None)
         name = firebase.get('/Characters/'+user+'/Name',None)
-        print(attributes.get('strength'))
         response = "The character " + name + " has: Health: " + str(attributes.get('health')) + ", Strength: " + str(attributes.get('strength')) + ", Dexterity: " + str(attributes.get('dexterity')) + ", Intelligence: " + str(attributes.get('intelligence')) + ", Luck: " + str(attributes.get('luck'))
     elif command.startswith("money"):
         money = firebase.get('/Characters/'+user+'/Meta/money',None)
@@ -67,7 +64,10 @@ def handle_command(command, channel, user):
         meta = firebase.get('/Characters/'+user+'/Meta', None)
         stage = meta.get('stage')
 
-        if stage == 0:
+
+        if battle not 'N/A':
+            response = "You're in the middle of an adventure already!"
+        elif stage == 0:
             chanceOfNothing = 15
             rng = random.randint(0,100)
             if rng <= chanceOfNothing:
@@ -79,15 +79,171 @@ def handle_command(command, channel, user):
                 level = int(meta.get('level'))
                 village = meta.get('location')
                 monster = get_encounter(level,village)
-                data = {'battle':monster, 'enemyHp':monster['health']}
+                data = {'battle':monster, 'enemyHp':monster['health'], 'stage':1}
                 firebase.patch('/Characters/'+user+'/Meta',data)
-                response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health."
+                response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
+    elif command.startswith("flee"):
+        if stage in (1,2,3):
+            data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+            firebase.patch('/Characters/'+user+'/Meta',data)
+            response = "You escaped safely back to " + firebase.get('/Characters/'+user+'/Meta/location',None)
+    elif command.startswith("loot"):
+        response=gen_loot(1,user)
+    elif command.startswith("attack"):
+        character = firebase.get('/Characters/'+user,None)
+        armor = character.get('armor')
+        weapon = character.get('weapon')
+        health = character.get('Attributes').get('health')
+        weapon, armor = get_equipment(weapon, armor)
+        mCurHp = character.get('Meta').get('enemyHp')
+        monster = character.get('Meta').get('battle')
+
+        heroDmg = random.randint(weapon.get('min'),weapon.get('max'))
+        critChance = character.get('Attributes').get('luck') + 100*weapon.get('crit')
+        if random.randint(0,100) <= critChance:
+            heroDmg = heroDmg * weapon.get('mod')
+        heroDmg = heroDmg + math.floor(character.get('Attributes').get('strength') * .5)
+        
+        mDmg = random.randint(monster.get('min'),monster.get('max'))
+        critChance = 100*monster.get('crit')
+        if random.randint(0,100) <= critChance:
+            mDmg = mDmg * monster.get('mod')
+
+        heroDR = armor.get('defense')
+        if mDmg >= heroDR:
+            mDmg = mDmg - heroDR
+
+        if character.get('Attributes').get('dexterity') >= math.floor(monster.get('power') * .5):
+            mCurHp = mCurHp - heroDmg
+            if mCurHp <= 0:
+                stage = character.get('Meta').get('stage')
+                print(stage)
+                response = gen_loot(stage,user)
+                if stage == 1:
+                    #Beat stage 1
+                    data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
+                    firebase.patch('/Characters/'+user+'/Meta',data)
+                    response = "You killed the " + monster.get('name') +"! "+ response + " Continue your adventure by saying 'adventure'"
+                elif stage == 2:
+                    #Beat stage 2
+                    data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':3}
+                    firebase.patch('/Characters/'+user+'/Meta',data)
+                    response = "You killed the " + monster.get('name') +"! "+ response + " Continue your adventure by saying 'adventure'"
+                else:
+                    #Beat the boss
+                    data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                    firebase.patch('/Characters/'+user+'/Meta',data)
+                    response = "You beat " + monster.get('name') +"! "+ response
+                    #####
+                    #Find new town
+                    #####
+            else:
+                health = health - mDmg
+                if health <= 0:
+                    response = new_user(character.get('Name'),user)
+                else:
+                    data = {'enemyHp':mCurHp}
+                    firebase.patch('/Characters/'+user+'/Meta',data)
+                    data = {'health':health}
+                    firebase.patch('/Characters/'+user+'/Attributes',data)
+                    ### Add critical hit flavor
+                    response = "You dealt " + str(heroDmg) + " and received " + str(mDmg) + " damage. You are currently at " + str(health) + " health. " + monster.get('name') + " has " + str(mCurHp) + " health left."
+        else:
+            health = health - mDmg
+            if health <= 0:
+                response = new_user(character.get('Name'),user)
+            else:
+                mCurHp = mCurHp - heroDmg
+                if mCurHp <= 0:
+                    stage = character.get('Meta').get('stage')
+                    print(stage)
+                    response = gen_loot(stage,user)
+                    if stage == 1:
+                        #Beat stage 1
+                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        response =  "You killed the " + monster.get('name') +"! "+ response + "Continue your adventure by saying 'adventure'"
+                    elif stage == 2:
+                        #Beat stage 2
+                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':3}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        response = "You killed the " + monster.get('name') +"! "+ response + " Continue your adventure by saying 'adventure'"
+                    else:
+                        #Beat the boss
+                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        response = "You beat " + monster.get('name') +"! "+ response
+                        #####
+                        #Find new town
+                        #####
+                else:
+                    data = {'enemyHp':mCurHp}
+                    firebase.patch('/Characters/'+user+'/Meta',data)
+                    data = {'health':health}
+                    firebase.patch('/Characters/'+user+'/Attributes',data)
+                    ### Add critical hit flavor
+                    response = "You dealt " + heroDmg + " and received " + mDmg + " damage. You are currently at " + health + " health. " + monster.get('name') + " has " + mCurHp + " health left."
+        
+
+        
 
     elif user == 'U4AD0NJ8L':
         response = "Lance stop being a fucking faggot"
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
+
+def gen_loot(stage,user):
+    if stage==1:
+        print("looting")
+        luck = firebase.get('/Characters/'+user+'/Attributes/luck',None)
+        if random.randint(0,100) <= luck:
+            print("CHESTS")
+            chestName = ""
+            rng = random.randint(0,3)
+            if rng == 0:
+                chestName="Empty Chest"
+            elif rng == 1:
+                chestName = "Small Chest"
+            elif rng == 2:
+                chestName = "Medium Chest"
+            elif rng == 3:
+                chestName = "Gold Chest"
+            quantity = 1
+            temp = firebase.get('/Characters/'+user+'/Inventory/'+chestName, None)
+            if temp:
+                quantity = temp + 1
+            data = {chestName:quantity}
+            firebase.patch('/Characters/'+user+'/Inventory/',data)
+            return "You got a "+chestName+"!"
+        else:
+            print("normal looting")
+            with open('config/items.json') as data_file:
+                items = json.load(data_file)['Miscellaneous']
+            item = items[random.randint(0,len(items)-1)]
+            print(item)
+            quantity = 1
+            temp = firebase.get('/Characters/'+user+'/Inventory/'+item.get('name'), None)
+            if temp:
+                quantity = temp + 1
+            print(quantity)
+            data = {item.get('name'):quantity}
+            firebase.patch('/Characters/'+user+'/Inventory/',data)
+            return "You found a "+item.get('name')+"!"
+
+def new_user(name, user):
+    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village'}, 'armor': 'Naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'soylent': 1}, 'weapon': 'Fists'}    
+    result = firebase.put('/Characters',user,data)
+    return "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
+
+def get_equipment(weaponName, armorName):
+    with open('config/items.json') as data_file:    
+        weapons = json.load(data_file)['Weapons']
+    with open('config/items.json') as data_file2:
+        armors = json.load(data_file2)['Armor']
+    weapon = weapons.get(weaponName)
+    armor = armors.get(armorName)
+    return weapon, armor
 
 def get_encounter(level, village):
     weights = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
@@ -125,8 +281,8 @@ if __name__ == "__main__":
             stuff = parse_slack_output(slack_client.rtm_read())
             if stuff[0] and stuff[1] and stuff[2]:
                 print(stuff[0])
-                print(stuff[1])
-                print(stuff[2])
+                #print(stuff[1])
+                #print(stuff[2])
                 handle_command(stuff[0], stuff[1], stuff[2])
             time.sleep(READ_WEBSOCKET_DELAY)
     else:

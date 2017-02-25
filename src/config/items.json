@@ -1,5 +1,5 @@
 {
-    "Weapons": [
+    "Weapons": 
         {
             "Fists": {
                 "power": 0,
@@ -178,8 +178,8 @@
                 "saleCost": 15
             }
         }
-    ],
-    "Armor": [
+    ,
+    "Armor": 
         {
             "Naked": {
                 "defense": 0,
@@ -210,7 +210,7 @@
                 "saleCost": 4
             }
         }
-    ],
+    ,
     "Potions": [
         {
             "name": "Small Health Potion",
@@ -235,168 +235,135 @@
     ],
     "Miscellaneous": [
         {
-            "name": "Book",
-            "value": 1,
-            "saleCost": 1
-        },
-        {
-            "name": "Great Book",
-            "value": 3,
-            "saleCost": 2
-        },
-        {
-            "name": "Flower",
-            "value": 0,
-            "saleCost": 1
-        },
-        {
-            "name": "Rock",
-            "value": 0,
-            "saleCost": 1
-        },
-        {
-            "name": "Mushroom",
-            "value": 3,
-            "saleCost": 1
-        },
-        {
-            "name": "Food",
-            "value": 2,
-            "saleCost": 1
-        },
-        {
             "name": "Empty Chest",
-            "value": 0,
-            "saleCost": 1
-        },
-        {
-            "name": "Gold Chest",
-            "value": 50,
             "saleCost": 1
         },
         {
             "name": "Small Chest",
-            "value": 10,
-            "saleCost": 1
+            "saleCost": 10
         },
         {
             "name": "Medium Chest",
-            "value": 25,
+            "saleCost": 25
+        },
+        {
+            "name": "Gold Chest",
+            "saleCost": 50
+        },
+        {
+            "name": "Book",
             "saleCost": 1
+        },
+        {
+            "name": "Great Book",
+            "saleCost": 3
+        },
+        {
+            "name": "Flower",
+            "saleCost": 1
+        },
+        {
+            "name": "Rock",
+            "saleCost": 1
+        },
+        {
+            "name": "Mushroom",
+            "saleCost": 2
+        },
+        {
+            "name": "Food",
+            "saleCost": 2
         },
         {
             "name": "Ale",
-            "value": 2,
-            "saleCost": 1
+            "saleCost": 2
         },
         {
             "name": "Map",
-            "value": 1,
-            "saleCost": 1
+            "saleCost": 5
         },
         {
             "name": "Pouch",
-            "value": 5,
-            "saleCost": 1
+            "saleCost": 5
         },
         {
             "name": "Scroll",
-            "value": 1,
-            "saleCost": 1
+            "saleCost": 3
         },
         {
             "name": "Red Leaf",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Yellow Leaf",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "White Leaf",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Log",
-            "value": 0,
-            "saleCost": 1
+            "saleCost": 2
         },
         {
             "name": "Candle",
-            "value": 0,
-            "saleCost": 1
+            "saleCost": 2
         },
         {
             "name": "Unicorn Horn",
-            "value": 20,
-            "saleCost": 1
+            "saleCost": 20
         },
         {
             "name": "Necklace",
-            "value": 2,
-            "saleCost": 1
+            "saleCost": 5
         },
         {
             "name": "Mask",
-            "value": 1,
             "saleCost": 1
         },
         {
             "name": "Flask",
-            "value": 1,
             "saleCost": 1
         },
         {
             "name": "Horse Figurine",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Knight Figurine",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Puzzle Box",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Pebble",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Hay",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Stone",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Stick",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Rotten Apple",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Basket",
-            "value": 0,
             "saleCost": 1
         },
         {
             "name": "Grass",
-            "value": 0,
             "saleCost": 1
         }
     ]
