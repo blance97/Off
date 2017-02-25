@@ -19,7 +19,7 @@ EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-slack_client = SlackClient('xoxb-146341984755-1fYi3Oau3Cx262xcxP3Tzzp0')
+slack_client = SlackClient('xoxb-146341984755-iSkNDwRRKTFM4S4a78YjCkSk')
 
 
 def handle_command(command, channel, user):
@@ -65,7 +65,7 @@ def handle_command(command, channel, user):
         stage = meta.get('stage')
 
 
-        if battle not 'N/A':
+        if meta.get('battle') != 'N/A':
             response = "You're in the middle of an adventure already!"
         elif stage == 0:
             chanceOfNothing = 15
@@ -83,12 +83,22 @@ def handle_command(command, channel, user):
                 firebase.patch('/Characters/'+user+'/Meta',data)
                 response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
     elif command.startswith("flee"):
+        stage = firebase.get('/Characters/'+user+'/Meta/stage',None)
         if stage in (1,2,3):
             data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
             firebase.patch('/Characters/'+user+'/Meta',data)
             response = "You escaped safely back to " + firebase.get('/Characters/'+user+'/Meta/location',None)
+        else:
+            response = "You're already at the village!"
     elif command.startswith("loot"):
         response=gen_loot(1,user)
+    elif command.startswith("wield"):
+        item = command[6:]
+        print(item)
+        data={'weapon':item}
+        print(data)
+        firebase.patch('/Characters/'+user,data)
+        response = "done"
     elif command.startswith("attack"):
         character = firebase.get('/Characters/'+user,None)
         armor = character.get('armor')
@@ -232,7 +242,7 @@ def gen_loot(stage,user):
             return "You found a "+item.get('name')+"!"
 
 def new_user(name, user):
-    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village'}, 'armor': 'Naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'soylent': 1}, 'weapon': 'Fists'}    
+    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village'}, 'armor': 'naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5, 'maxhp':10}, 'Inventory': {'soylent': 1}, 'weapon': 'fists'}    
     result = firebase.put('/Characters',user,data)
     return "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
 
