@@ -226,7 +226,7 @@
             {
                 "name": "Giant",
                 "power": 7,
-                "health": 20,
+                "health": 40,
                 "min":0,
                 "max":1,
                 "crit":1,
@@ -235,7 +235,7 @@
             {
                 "name":"Hydra",
                 "power": 7,
-                "health": 15,
+                "health": 30,
                 "min":1,
                 "max":6,
                 "crit":0.05,
@@ -244,7 +244,7 @@
             {
                 "name": "Dark Elf",
                 "power": 7,
-                "health": 12,
+                "health": 35,
                 "min":2,
                 "max":6,
                 "crit":0.05,
@@ -255,7 +255,7 @@
             {
                 "name": "Warlock",
                 "power": 8,
-                "health": 14,
+                "health": 50,
                 "min":5,
                 "max":7,
                 "crit":0,
@@ -264,7 +264,7 @@
             {
                 "name": "Cockatrice",
                 "power": 8,
-                "health": 18,
+                "health": 60,
                 "min":0,
                 "max":9,
                 "crit":0.1,
@@ -275,7 +275,7 @@
             {
                 "name": "Basilisk",
                 "power": 9,
-                "health": 16,
+                "health": 100,
                 "min":0,
                 "max":1,
                 "crit":1,
@@ -284,7 +284,7 @@
             {
                 "name": "Wyvern",
                 "power": 9,
-                "health": 25,
+                "health": 50,
                 "min":3,
                 "max":10,
                 "crit":0.07,
@@ -295,7 +295,7 @@
             {
                 "name": "Fire Dragon",
                 "power": 10,
-                "health": 30,
+                "health": 120,
                 "min":5,
                 "max":9,
                 "crit":0.1,
@@ -303,8 +303,8 @@
             },
             {
                 "name":"Lich",
-                "power": 10,
-                "health": 28,
+                "power": 100,
+                "health": ,
                 "min":2,
                 "max":12,
                 "crit":0.05,
