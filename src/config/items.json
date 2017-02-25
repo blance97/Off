@@ -1,0 +1,266 @@
+{
+    "Weapons": [
+        {
+            "name": "Rocket Launcher",
+            "power": 10
+        },
+        {
+            "name": "Spear",
+            "power": 2
+        },
+        {
+            "name": "Sword",
+            "power": 4
+        },
+        {
+            "name": "Dagger",
+            "power": 1
+        },
+        {
+            "name": "Bow",
+            "power": 5
+        },
+        {
+            "name": "Longsword",
+            "power": 6
+        },
+        {
+            "name": "Hand Axe",
+            "power": 6
+        },
+        {
+            "name": "Mace",
+            "power": 4
+        },
+        {
+            "name": "Slingshot",
+            "power": 1
+        },
+        {
+            "name": "Crossbow",
+            "power": 8
+        },
+        {
+            "name": "Knife",
+            "power": 1
+        },
+        {
+            "name": "Great Sword",
+            "power": 10
+        },
+        {
+            "name": "Hatchet",
+            "power": 4
+        },
+        {
+            "name": "Throwing Axe",
+            "power": 5
+        },
+        {
+            "name": "Bastard Sword",
+            "power": 8
+        },
+        {
+            "name": "Great Axe",
+            "power": 10
+        },
+        {
+            "name": "Hammer",
+            "power": 4
+        },
+        {
+            "name": "Maul",
+            "power": 10
+        },
+        {
+            "name": "Lance",
+            "power": 9
+        },
+        {
+            "name": "Long Bow",
+            "power": 7
+        }
+    ],
+    "Armor": [
+        {
+            "name": "Naked",
+            "defense": 0
+        },
+        {
+            "name": "Leather",
+            "defense": 1
+        },
+        {
+            "name": "Mithril",
+            "defense": 10
+        },
+        {
+            "name": "Chain Mail",
+            "defense": 6
+        },
+        {
+            "name": "Royal Armor",
+            "defense": 9
+        },
+        {
+            "name": "Plate Armor",
+            "defense": 2
+        },
+        {
+            "name": "Steel Armer",
+            "defense": 4
+        }
+    ],
+    "Potions": [
+        {
+            "name": "Small Health Potion",
+            "power": 1
+        },
+        {
+            "name": "Medium Health Potion",
+            "power": 5
+        },
+        {
+            "name": "Large Health Potion",
+            "power": 10
+        },
+        {
+            "name": "Soylent",
+            "power": 0
+        }
+    ],
+    "Miscellaneous": [
+        {
+            "name": "Book",
+            "value": 1
+        },
+        {
+            "name": "Great Book",
+            "value": 3
+        },
+        {
+            "name": "Flower",
+            "value": 0
+        },
+        {
+            "name": "Rock",
+            "value": 0
+        },
+        {
+            "name": "Mushroom",
+            "value": 3
+        },
+        {
+            "name": "Food",
+            "value": 2
+        },
+        {
+            "name": "Empty Chest",
+            "value": 0
+        },
+        {
+            "name": "Gold Chest",
+            "value": 50
+        },
+        {
+            "name": "Small Chest",
+            "value": 10
+        },
+        {
+            "name": "Medium Chest",
+            "value": 25
+        },
+        {
+            "name": "Ale",
+            "value": 2
+        },
+        {
+            "name": "Map",
+            "value": 1
+        },
+        {
+            "name": "Pouch",
+            "value": 5
+        },
+        {
+            "name": "Scroll",
+            "value": 1
+        },
+        {
+            "name": "Red Leaf",
+            "value": 0
+        },
+        {
+            "name": "Yellow Leaf",
+            "value": 0
+        },
+        {
+            "name": "White Leaf",
+            "value": 0
+        },
+        {
+            "name": "Log",
+            "value": 0
+        },
+        {
+            "name": "Candle",
+            "value": 0
+        },
+        {
+            "name": "Unicorn Horn",
+            "value": 20
+        },
+        {
+            "name": "Necklace",
+            "value": 2
+        },
+        {
+            "name": "Mask",
+            "value": 1
+        },
+        {
+            "name": "Flask",
+            "value": 1
+        },
+        {
+            "name": "Horse Figurine",
+            "value": 0
+        },
+        {
+            "name": "Knight Figurine",
+            "value": 0
+        },
+        {
+            "name": "Puzzle Box",
+            "value": 0
+        },
+        {
+            "name": "Pebble",
+            "value": 0
+        },
+        {
+            "name": "Hay",
+            "value": 0
+        },
+        {
+            "name": "Stone",
+            "value": 0
+        },
+        {
+            "name": "Stick",
+            "value": 0
+        },
+        {
+            "name": "Rotten Apple",
+            "value": 0
+        },
+        {
+            "name": "Basket",
+            "value": 0
+        },
+        {
+            "name": "Grass",
+            "value": 0
+        }
+    ]
+}
