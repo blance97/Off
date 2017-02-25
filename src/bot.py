@@ -9,6 +9,7 @@ firebase = firebase.FirebaseApplication('https://slackbotadventures.firebaseio.c
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
+BOT_ID = 'U4AA1UYN7'
 
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
@@ -16,6 +17,7 @@ EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = SlackClient('xoxb-146341984755-1fYi3Oau3Cx262xcxP3Tzzp0')
 
 
 def handle_command(command, channel, user):
@@ -28,9 +30,27 @@ def handle_command(command, channel, user):
                "* command with numbers, delimited by spaces."
     if command.startswith("newchar"):
         name = command.split(" ")[1]
-        data = {name: {'Armor': {'Arm': 'Naked'}, 'Attributes': {'Charisma': 0, 'Dexterity': 0, 'Health': 10, 'Intelligence': 0, 'Luck': 0, 'Strength': 0}, 'Inventory': {'Item': 'Soylent'}, 'Weapon': {'Wep': 'Fists'}}}    
+        data = {'Name':name, 'Armor': {'arm': 'naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'fists'}}    
         result = firebase.put('/Characters',user,data)
-        response = "You fucking did it dumb shit"
+        response = "Your character, " + name + " was made!"
+    elif command.startswith("allocate"):
+        stuff = command.split(" ")
+        attr = stuff[1]
+        points = int(stuff[2])
+        curPoints = int(firebase.get('/Characters/'+user+'/Attributes/AllocationPoints',None))
+        if attr not in ('charisma','dexterity','strength','intelligence','luck'):
+            response = "Invalid attribute"
+        elif curPoints < abs(points):
+            response = "Invalid point amount"
+        else:
+            data = {attr:points, 'AllocationPoints':curPoints-points}
+            firebase.patch('/Characters/'+user+'/Attributes',data)
+            response = "You allocated " + str(points) + " to " + attr + "."
+    elif command.startswith("attributes"):
+        attributes = firebase.get('/Characters/'+user+'/Attributes',None)
+        name = firebase.get('/Characters/'+user+'/Name',None)
+        print(attributes.get('strength'))
+        response = "The character " + name + " has: Health: " + str(attributes.get('health')) + ", Strength: " + str(attributes.get('strength')) + ", Dexterity: " + str(attributes.get('dexterity')) + ", Intelligence: " + str(attributes.get('intelligence')) + ", Luck: " + str(attributes.get('luck'))
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
