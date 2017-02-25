@@ -1,0 +1,118 @@
+
+  { "memes": [
+        {
+            "name": "Weed Wizard",
+            "power": 420
+        },
+        {
+            "name": "Nightman",
+            "power": 10
+        },
+        {
+            "name": "Chin Chin",
+            "power": 8
+        },
+        {
+            "name": "Salt Bae",
+            "power": 1
+        },
+        {
+            "name":"Ultra Rare Pepe",
+            "power": 5
+        },
+        {
+            "name": "Steel Beams",
+            "power": 10
+        },
+        {
+            "name": "Mr. Negi Generation 3000",
+            "power": 6
+        }
+    ],
+    "regular":[
+        {
+            "name": "Ogre",
+            "power": 5
+        },
+        {
+            "name": "Cave Troll",
+            "power": 3
+        },
+        {
+            "name": "Fire Dragon",
+            "power": 10
+        },
+        {
+            "name": "Theif",
+            "power": 2
+        },
+        {
+            "name": "Bridge Troll",
+            "power": 3
+        },
+        {
+            "name": "Demon",
+            "power": 6
+        },
+        {
+            "name": "Giant",
+            "power": 7
+        },
+        {
+            "name": "Giant Spider",
+            "power": 1
+        },
+        {
+            "name": "Spellcaster",
+            "power": 4
+        },
+        {
+            "name": "Skeletons",
+            "power": 2
+        },
+        {
+            "name": "Wolf",
+            "power": 1
+        },
+        {
+            "name": "Werewolf",
+            "power": 4
+        },
+        {
+            "name":"Lich",
+            "power": 10
+        },
+        {
+            "name":"Hydra",
+            "power": 7
+        },
+        {
+            "name": "Berserker",
+            "power": 4
+        },
+        {
+            "name": "Dark Elf",
+            "power": 7
+        },
+        {
+            "name": "Zombie",
+            "power": 1
+        },
+        {
+            "name": "Ghost",
+            "power": 1
+        },
+        {
+            "name":"Bat",
+            "power": 1
+        },
+        {
+            "name": "Giant Rat",
+            "power": 2
+        },
+        {
+            "name": "Warlock",
+            "power": 8
+        }
+    ]
+  }
