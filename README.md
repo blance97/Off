@@ -1,2 +1,1 @@
-# RedditMemeMaker
-Create memes based off reddit data
+The lance is the best weapon.
