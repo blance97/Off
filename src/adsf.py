@@ -1,8 +1,6 @@
-from queue import PriorityQueue
-
-q = PriorityQueue(maxsize=2)
-for i in range(15):
-    q.put(i,i)
-
-print(q.get())
-print(q.get())
+sum = 0
+array = []
+for i in range(0,10):
+    sum+=3**i
+    array.append(sum)
+print(array)
