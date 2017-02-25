@@ -18,7 +18,7 @@ EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-slack_client = SlackClient('xoxb-146341984755-1fYi3Oau3Cx262xcxP3Tzzp0')
+slack_client = SlackClient('xoxb-146341984755-iSkNDwRRKTFM4S4a78YjCkSk')
 
 
 def handle_command(command, channel, user):
@@ -55,6 +55,8 @@ def handle_command(command, channel, user):
     elif command.startswith("money"):
         money = firebase.get('/Characters/'+user+'/Meta/money',None)
         response = "You have "+str(money)+" gold."
+    elif command.startswith("help"):
+        response = "/***********************************************************\n The commands: \n  adventure--- Starts a new adventure \n allocate--- spend attribute points on skils \n stats--- lists current attribute points an other character data \n money--- lists the amount of money you have \n whereami--- prints out the current location of character \n flee--- run from adventure \n attack--- attacks when on adventure"
     elif command.startswith("whereami"):
         meta = firebase.get('/Characters/'+user+'/Meta',None)
         location = meta.get('location')
