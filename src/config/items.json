@@ -1,214 +1,214 @@
 {
     "Weapons": [
-
         {
-           "Fists":{
-               "power": 0,
-                "min":0,
-                "max":1,
-                "crit":0.05,
-                "mod":1
-                }
-        },
-        {
-            "Rocket Launcher":{
+            "Fists": {
+                "power": 0,
+                "min": 0,
+                "max": 1,
+                "crit": 0.05,
+                "mod": 1,
+                "saleCost": 0
+            },
+            "Rocket Launcher": {
                 "power": 10,
-                "min":5,
-                "max":36,
-                "crit":0,
-                "mod":1
+                "min": 5,
+                "max": 36,
+                "crit": 0,
+                "mod": 1,
+                "saleCost": 50
+            },
+            "Spear": {
+                "power": 2,
+                "min": 0,
+                "max": 3,
+                "crit": 0.08,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Sword": {
+                "power": 4,
+                "min": 2,
+                "max": 5,
+                "crit": 0.1,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Dagger": {
+                "power": 1,
+                "min": 0,
+                "max": 2,
+                "crit": 0.05,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Bow": {
+                "power": 5,
+                "min": 0,
+                "max": 6,
+                "crit": 0.12,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Longsword": {
+                "power": 6,
+                "min": 3,
+                "max": 8,
+                "crit": 0.1,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Hand Axe": {
+                "power": 6,
+                "min": 1,
+                "max": 11,
+                "crit": 0.05,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Mace": {
+                "power": 4,
+                "min": 3,
+                "max": 4,
+                "crit": 0.05,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Slingshot": {
+                "power": 1,
+                "min": 0,
+                "max": 1,
+                "crit": 0.1,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Crossbow": {
+                "power": 8,
+                "min": 0,
+                "max": 15,
+                "crit": 0.12,
+                "mod": 2,
+                "saleCost": 2
+            },
+            "Knife": {
+                "power": 1,
+                "min": 0,
+                "max": 1,
+                "crit": 0.05,
+                "mod": 2,
+                "saleCost": 3
+            },
+            "Great Sword": {
+                "power": 10,
+                "min": 10,
+                "max": 20,
+                "crit": 0.1,
+                "mod": 2,
+                "saleCost": 5
+            },
+            "Hatchet": {
+                "power": 4,
+                "min": 1,
+                "max": 6,
+                "crit": 0.05,
+                "mod": 2,
+                "saleCost": 3
+            },
+            "Throwing Axe": {
+                "power": 5,
+                "min": 1,
+                "max": 8,
+                "crit": 0.03,
+                "mod": 2,
+                "saleCost": 1
+            },
+            "Bastard Sword": {
+                "power": 8,
+                "min": 6,
+                "max": 11,
+                "crit": 0.1,
+                "mod": 2,
+                "saleCost": 5
+            },
+            "Great Axe": {
+                "power": 10,
+                "min": 3,
+                "max": 30,
+                "crit": 0.05,
+                "mod": 2,
+                "saleCost": 10
+            },
+            "Great Hammer": {
+                "power": 4,
+                "min": 3,
+                "max": 3,
+                "crit": 0.01,
+                "mod": 2,
+                "saleCost": 20
+            },
+            "Maul": {
+                "power": 10,
+                "min": 5,
+                "max": 14,
+                "crit": 0.05,
+                "mod": 4,
+                "saleCost": 10
+            },
+            "Lance": {
+                "power": 9,
+                "min": 3,
+                "max": 5,
+                "crit": 0.5,
+                "mod": 6,
+                "saleCost": 10000
+            },
+            "The Lance": {
+                "power": 1,
+                "min": 3,
+                "max": 4,
+                "crit": 0.9,
+                "mod": 0,
+                "saleCost": -1
+            },
+            "Long Bow": {
+                "power": 7,
+                "min": 0,
+                "max": 10,
+                "crit": 0.12,
+                "mod": 2,
+                "saleCost": 15
             }
-        },
-        {
-            "name": "Spear",
-            "power": 2,
-            "min":0,
-            "max":3,
-            "crit":0.08,
-            "mod":2
-        },
-        {
-            "name": "Sword",
-            "power": 4,
-            "min":2,
-            "max":5,
-            "crit":0.1,
-            "mod":2
-        },
-        {
-            "name": "Dagger",
-            "power": 1,
-            "min":0,
-            "max":2,
-            "crit":0.05,
-            "mod":2
-        },
-        {
-            "name": "Bow",
-            "power": 5,
-            "min":0,
-            "max":6,
-            "crit":0.12,
-            "mod":2
-        },
-        {
-            "name": "Longsword",
-            "power": 6,
-            "min":3,
-            "max":8,
-            "crit":0.1,
-            "mod":2
-        },
-        {
-            "name": "Hand Axe",
-            "power": 6,
-            "min":1,
-            "max":11,
-            "crit":0.05,
-            "mod":2
-        },
-        {
-            "name": "Mace",
-            "power": 4,
-            "min":3,
-            "max":4,
-            "crit":0.05,
-            "mod":2
-        },
-        {
-            "name": "Slingshot",
-            "power": 1,
-            "min":0,
-            "max":1,
-            "crit":0.1,
-            "mod":2
-        },
-        {
-            "name": "Crossbow",
-            "power": 8,
-            "min":0,
-            "max":15,
-            "crit":0.12,
-            "mod":2
-        },
-        {
-            "name": "Knife",
-            "power": 1,
-            "min":0,
-            "max":1,
-            "crit":0.05,
-            "mod":2
-        },
-        {
-            "name": "Great Sword",
-            "power": 10,
-            "min":10,
-            "max":20,
-            "crit":0.1,
-            "mod":2
-        },
-        {
-            "name": "Hatchet",
-            "power": 4,
-            "min":1,
-            "max":6,
-            "crit":0.05,
-            "mod":2
-        },
-        {
-            "name": "Throwing Axe",
-            "power": 5,
-            "min":1,
-            "max":8,
-            "crit":0.03,
-            "mod":2
-        },
-        {
-            "name": "Bastard Sword",
-            "power": 8,
-            "min":6,
-            "max":11,
-            "crit":0.1,
-            "mod":2
-        },
-        {
-            "name": "Great Axe",
-            "power": 10,
-            "min":3,
-            "max":30,
-            "crit":0.05,
-            "mod":2
-        },
-        {
-            "name": "Great Hammer",
-            "power": 4,
-            "min":3,
-            "max":3,
-            "crit":0.01,
-            "mod":2
-        },
-        {
-            "name": "Maul",
-            "power": 10,
-            "min":5,
-            "max":14,
-            "crit":0.05,
-            "mod":4
-        },
-        {
-            "name": "Lance",
-            "power": 9,
-            "min":3,
-            "max":5,
-            "crit":0.5,
-            "mod":6
-        },
-        {
-            "name": "The Lance",
-            "power": 1,
-            "min":3,
-            "max":4,
-            "crit":0.9,
-            "mod":0
-        },
-        {
-            "name": "Long Bow",
-            "power": 7,
-            "min":0,
-            "max":10,
-            "crit":0.12,
-            "mod":2
         }
     ],
     "Armor": [
         {
-            "Naked":{
-                "defense": 0
+            "Naked": {
+                "defense": 0,
+                "saleCost": 0
+            },
+            "Leather": {
+                "defense": 1,
+                "saleCost": 1
+            },
+            "Mithril": {
+                "defense": 10,
+                "saleCost": 10
+            },
+            "Chain Mail": {
+                "defense": 6,
+                "saleCost": 6
+            },
+            "Royal Armor": {
+                "defense": 9,
+                "saleCost": 9
+            },
+            "Plate Armor": {
+                "defense": 2,
+                "saleCost": 2
+            },
+            "Steel Armer": {
+                "defense": 4,
+                "saleCost": 4
             }
-        },
-        {
-            "name": "Leather",
-            "defense": 1
-        },
-        {
-            "name": "Mithril",
-            "defense": 10
-        },
-        {
-            "name": "Chain Mail",
-            "defense": 6
-        },
-        {
-            "name": "Royal Armor",
-            "defense": 9
-        },
-        {
-            "name": "Plate Armor",
-            "defense": 2
-        },
-        {
-            "name": "Steel Armer",
-            "defense": 4
         }
     ],
     "Potions": [
