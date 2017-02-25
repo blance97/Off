@@ -30,9 +30,9 @@ def handle_command(command, channel, user):
                "* command with numbers, delimited by spaces."
     if command.startswith("newchar"):
         name = command.split(" ")[1]
-        data = {'Name':name, 'Armor': {'arm': 'naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'fists'}}    
+        data = {'Name':name, 'Meta':{'money':0, 'battle':'N/A', 'stage':0, 'location':'Dire Village'}, 'Armor': {'arm': 'naked'}, 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5}, 'Inventory': {'item': 'soylent'}, 'Weapon': {'wep': 'fists'}}    
         result = firebase.put('/Characters',user,data)
-        response = "Your character, " + name + " was made!"
+        response = "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
     elif command.startswith("allocate"):
         stuff = command.split(" ")
         attr = stuff[1]
@@ -51,6 +51,19 @@ def handle_command(command, channel, user):
         name = firebase.get('/Characters/'+user+'/Name',None)
         print(attributes.get('strength'))
         response = "The character " + name + " has: Health: " + str(attributes.get('health')) + ", Strength: " + str(attributes.get('strength')) + ", Dexterity: " + str(attributes.get('dexterity')) + ", Intelligence: " + str(attributes.get('intelligence')) + ", Luck: " + str(attributes.get('luck'))
+    elif command.startswith("money"):
+        money = firebase.get('/Characters/'+user+'/Meta/money',None)
+        response = "You have "+str(money)+" gold."
+    elif command.startswith("whereami"):
+        meta = firebase.get('/Characters/'+user+'/Meta',None)
+        location = meta.get('location')
+        stage = meta.get('stage')
+        if stage!=0:
+            response="You're on an adventure near the town of " + location
+        else:
+            response = "You're in the town of "+location
+    elif user == 'U4AD0NJ8L':
+        response = "Lance stop being a fucking faggot"
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
