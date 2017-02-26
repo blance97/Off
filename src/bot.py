@@ -7,14 +7,13 @@ import markovify
 from slackclient import SlackClient
 from firebase import firebase
 
-firebase = firebase.FirebaseApplication('https://slackbotadventures.firebaseio.com/', None)
+firebase = firebase.FirebaseApplication(os.environ.get('FIREBASE_URL'), None)
 with open("output.txt") as f:
     text = f.read()
 
 text_model = markovify.Text(text)
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
-BOT_ID = 'U4AA1UYN7'
 
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
@@ -22,7 +21,6 @@ EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-slack_client = SlackClient('xoxb-146341984755-A3A7fjqsQ3v4Cj28DSgVughA')
 
 
 def handle_command(command, channel, user):
