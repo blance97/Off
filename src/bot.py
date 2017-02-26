@@ -152,7 +152,7 @@ def handle_command(command, channel, user):
                 #########
                 # Add flavor text stuff
                 #########
-                data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
+                data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':1}
                 firebase.patch('/Characters/'+user+'/Meta',data)
                 response = "Nothing happens"
             else:
@@ -162,16 +162,75 @@ def handle_command(command, channel, user):
                 data = {'battle':monster, 'enemyHp':monster['health'], 'stage':1}
                 firebase.patch('/Characters/'+user+'/Meta',data)
                 response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
+        elif stage==1:
+            data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
+            firebase.patch('/Characters/'+user+'/Meta',data)
+            rng = random.randint(0,100)
+            if rng <= 15:
+                #Nothing
+                response = "Nothing happens"
+            elif rng <=50:
+                #Regular encounter
+                level = int(meta.get('level'))
+                village = meta.get('location')
+                monster = get_encounter(level,village)
+                data = {'battle':monster, 'enemyHp':monster['health']}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
+            elif rng <= 75:
+                #Hideout
+                level = int(meta.get('level'))
+                village = meta.get('location')
+                monster = get_encounter(level,village)
+                data = {'battle':monster, 'enemyHp':monster['health'], 'hideout':True}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "You come upon the " + monster['name'] + " hideout and are attacked by one of them with "+ str(monster['health'])+" health. Use attack or flee."
+            else:
+                #Trap
+                level = int(meta.get('level'))
+                village = meta.get('location')
+                monster = get_encounter(level,village)
+                weaponName = firebase.get('/Characters/'+user+'/weapon', None)
+                if weaponName != "fists":
+                    data = {'battle':monster, 'enemyHp':monster['health'], 'dropWep':weaponName}
+                    firebase.patch('/Characters/'+user+'/Meta',data)
+                    data = {'weapon':'fists'}
+                    firebase.patch('/Characters/'+user,data)
+
+                    quantity = firebase.get('/Characters/'+user+'/Inventory/'+weaponName, None)
+                    if quantity > 1:
+                        data = {weaponName:quantity-1}
+                        firebase.patch('/Characters/'+user+'/Inventory',data)
+                    else:
+                        firebase.delete('/Characters/'+user+'/Inventory',weaponName)
+
+                    response = "Walking through the area, you fall into a " + monster['name'] + " trap! You drop your weapon and must fend for yourself! A " + monster['name'] + " with " + str(monster['health']) + " health charges at you."
+                else:
+                    health = firebase.get('/Characters/'+user+'/Attributes/health',None)
+                    health = health - level
+                    if health <= 0:
+                        death = new_user(character.get('Name'),user)
+                        response = "While walking through the area you fell into a trap and died. " + death
+                    else:
+                        data = {'health':health}
+                        firebase.patch('/Characters/'+user+'/Attributes',data)
+                        response = "Walking through the area, you fall into a " + monster['name'] + " trap! You fall and lose "+str(level)+" health! You currently have "+str(health)+" health. A " + monster['name']+ " with " + str(monster['health']) +" charges at you."
+
     elif command.startswith("flee"):
         stage = firebase.get('/Characters/'+user+'/Meta/stage',None)
         if stage in (1,2,3):
-            data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
-            firebase.patch('/Characters/'+user+'/Meta',data)
-            response = "You escaped safely back to " + firebase.get('/Characters/'+user+'/Meta/location',None)
+            if firebase.get('/Characters/'+user+'/Meta/dropWep',None) != 'N/A':
+                data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'dropWep':'N/A', 'hideout':False}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "You escaped safely back to " + firebase.get('/Characters/'+user+'/Meta/location',None) +". But you left your weapon behind."
+            else:
+                data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'hideout':False}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "You escaped safely back to " + firebase.get('/Characters/'+user+'/Meta/location',None)
         else:
             response = "You're already at the village!"
     elif command.startswith("loot"):
-        response=gen_loot(1,user)
+        response=gen_loot(2,user)
     elif command.startswith("wield"):
         item = command[6:]
         with open('config/items.json') as data_file:
@@ -202,99 +261,126 @@ def handle_command(command, channel, user):
             response = "Equipped "+ item
     elif command.startswith("attack"):
         character = firebase.get('/Characters/'+user,None)
-        armor = character.get('armor')
-        weapon = character.get('weapon')
-        health = character.get('Attributes').get('health')
-        weapon, armor = get_equipment(weapon, armor)
-        mCurHp = character.get('Meta').get('enemyHp')
         monster = character.get('Meta').get('battle')
+        if monster == 'N/A':
+            response = "You're in the village!"
+        else:
+            armor = character.get('armor')
+            weapon = character.get('weapon')
+            health = character.get('Attributes').get('health')
+            weapon, armor = get_equipment(weapon, armor)
+            mCurHp = character.get('Meta').get('enemyHp')
 
-        heroDmg = random.randint(weapon.get('min'),weapon.get('max'))
-        critChance = character.get('Attributes').get('luck') + 100*weapon.get('crit')
-        if random.randint(0,100) <= critChance:
-            heroDmg = heroDmg * weapon.get('mod')
-        heroDmg = heroDmg + math.floor(character.get('Attributes').get('strength') * .5)
-        
-        mDmg = random.randint(monster.get('min'),monster.get('max'))
-        critChance = 100*monster.get('crit')
-        if random.randint(0,100) <= critChance:
-            mDmg = mDmg * monster.get('mod')
+            heroDmg = random.randint(weapon.get('min'),weapon.get('max'))
+            critChance = character.get('Attributes').get('luck') + 100*weapon.get('crit')
+            if random.randint(0,100) <= critChance:
+                heroDmg = heroDmg * weapon.get('mod')
+            heroDmg = heroDmg + math.floor(character.get('Attributes').get('strength') * .5)
+            
+            mDmg = random.randint(monster.get('min'),monster.get('max'))
+            critChance = 100*monster.get('crit')
+            if random.randint(0,100) <= critChance:
+                mDmg = mDmg * monster.get('mod')
 
-        heroDR = armor.get('defense')
-        if mDmg >= heroDR:
-            mDmg = mDmg - heroDR
+            heroDR = armor.get('defense')
+            if mDmg >= heroDR:
+                mDmg = mDmg - heroDR
 
-        if character.get('Attributes').get('dexterity') >= math.floor(monster.get('power') * .5):
-            mCurHp = mCurHp - heroDmg
-            if mCurHp <= 0:
-                stage = character.get('Meta').get('stage')
-                print(stage)
-                response = gen_loot(stage,user)
-                if stage == 1:
-                    #Beat stage 1
-                    data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
-                    firebase.patch('/Characters/'+user+'/Meta',data)
-                    response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
-                elif stage == 2:
-                    #Beat stage 2
-                    data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':3}
-                    firebase.patch('/Characters/'+user+'/Meta',data)
-                    response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
+            if character.get('Attributes').get('dexterity') >= math.floor(monster.get('power') * .5):
+                mCurHp = mCurHp - heroDmg
+                if mCurHp <= 0:
+                    stage = character.get('Meta').get('stage')
+                    temp = firebase.get('/Characters/'+user+'/Meta/dropWep',None)
+                    if temp != 'N/A':
+                        data = {'dropWep':'N/A'}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        quantity = firebase.get('/Characters/'+user+'/Inventory/'+temp, None)
+                        if not quantity:
+                            data = {temp:1}
+                            firebase.patch('/Characters/'+user+'/Inventory',data)
+                        else:
+                            data = {temp:quantity+1}
+                            firebase.patch('/Characters/'+user+'/Inventory',data)
+
+                    response = gen_loot(stage,user)
+                    if stage == 1:
+                        #Beat stage 1
+                        response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
+                        data = {'battle':'N/A', 'enemyHp':'N/A'}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                    elif stage == 2:
+                        #Beat stage 2
+                        print(str(heroDmg))
+                        print(monster.get('name'))
+                        print(str(health))
+                        print(response)
+                        response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
+                        data = {'battle':'N/A', 'enemyHp':'N/A'}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                    else:
+                        #Beat the boss
+                        response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +"You are currently at "+str(health) + " health. "+ response
+                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        #####
+                        #Find new town
+                        #####
                 else:
-                    #Beat the boss
-                    data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
-                    firebase.patch('/Characters/'+user+'/Meta',data)
-                    response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +"You are currently at "+str(health) + " health. "+ response
-                    #####
-                    #Find new town
-                    #####
+                    health = health - mDmg
+                    if health <= 0:
+                        response = new_user(character.get('Name'),user)
+                    else:
+                        response = "You dealt " + str(heroDmg) + " and received " + str(mDmg) + " damage. You are currently at " + str(health) + " health. " + monster.get('name') + " has " + str(mCurHp) + " health left."
+                        data = {'enemyHp':mCurHp}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        data = {'health':health}
+                        firebase.patch('/Characters/'+user+'/Attributes',data)
+                        ### Add critical hit flavor
             else:
                 health = health - mDmg
                 if health <= 0:
                     response = new_user(character.get('Name'),user)
                 else:
-                    data = {'enemyHp':mCurHp}
-                    firebase.patch('/Characters/'+user+'/Meta',data)
-                    data = {'health':health}
-                    firebase.patch('/Characters/'+user+'/Attributes',data)
-                    ### Add critical hit flavor
-                    response = "You dealt " + str(heroDmg) + " and received " + str(mDmg) + " damage. You are currently at " + str(health) + " health. " + monster.get('name') + " has " + str(mCurHp) + " health left."
-        else:
-            health = health - mDmg
-            if health <= 0:
-                response = new_user(character.get('Name'),user)
-            else:
-                mCurHp = mCurHp - heroDmg
-                if mCurHp <= 0:
-                    stage = character.get('Meta').get('stage')
-                    print(stage)
-                    response = gen_loot(stage,user)
-                    if stage == 1:
-                        #Beat stage 1
-                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':2}
-                        firebase.patch('/Characters/'+user+'/Meta',data)
-                        response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
-                    elif stage == 2:
-                        #Beat stage 2
-                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':3}
-                        firebase.patch('/Characters/'+user+'/Meta',data)
-                        response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
+                    mCurHp = mCurHp - heroDmg
+                    if mCurHp <= 0:
+                        stage = character.get('Meta').get('stage')
+                        temp = firebase.get('/Characters/'+user+'/Meta/dropWep',None)
+                        if temp != 'N/A':
+                            quantity = firebase.get('/Characters/'+user+'/Inventory/'+temp, None)
+                            if not quantity:
+                                data = {temp:1}
+                                firebase.patch('/Characters/'+user+'/Inventory',data)
+                            else:
+                                data = {temp:quantity+1}
+                                firebase.patch('/Characters/'+user+'/Inventory',data)
+                                
+                        response = gen_loot(stage,user)
+                        if stage == 1:
+                            #Beat stage 1
+                            response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
+                            data = {'battle':'N/A', 'enemyHp':'N/A'}
+                            firebase.patch('/Characters/'+user+'/Meta',data)
+                        elif stage == 2:
+                            #Beat stage 2
+                            response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
+                            data = {'battle':'N/A', 'enemyHp':'N/A'}
+                            firebase.patch('/Characters/'+user+'/Meta',data)
+                        else:
+                            #Beat the boss
+                            response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +"You are currently at "+str(health) + " health. "+ response
+                            data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                            firebase.patch('/Characters/'+user+'/Meta',data)
+                            #####
+                            #Find new town
+                            #####
                     else:
-                        #Beat the boss
-                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                        response = "You dealt " + str(heroDmg) + " and received " + str(mDmg) + " damage. You are currently at " + str(health) + " health. " + monster.get('name') + " has " + str(mCurHp) + " health left."
+                        data = {'enemyHp':mCurHp}
                         firebase.patch('/Characters/'+user+'/Meta',data)
-                        response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +"You are currently at "+str(health) + " health. "+ response
-                        #####
-                        #Find new town
-                        #####
-                else:
-                    data = {'enemyHp':mCurHp}
-                    firebase.patch('/Characters/'+user+'/Meta',data)
-                    data = {'health':health}
-                    firebase.patch('/Characters/'+user+'/Attributes',data)
-                    ### Add critical hit flavor
-                    response = "You dealt " + str(heroDmg) + " and received " + str(mDmg) + " damage. You are currently at " + str(health) + " health. " + monster.get('name') + " has " + str(mCurHp) + " health left."
-        
+                        data = {'health':health}
+                        firebase.patch('/Characters/'+user+'/Attributes',data)
+                        ### Add critical hit flavor
+            
 
         
 
@@ -334,13 +420,71 @@ def gen_loot(stage,user):
             temp = firebase.get('/Characters/'+user+'/Inventory/'+item.get('name'), None)
             if temp:
                 quantity = temp + 1
-            print(quantity)
             data = {item.get('name'):quantity}
             firebase.patch('/Characters/'+user+'/Inventory/',data)
             return "You found a "+item.get('name')+"!"
+    elif stage==2:
+        if firebase.get('/Characters/'+user+'/Meta/hideout', None) == True:
+            data = {'hideout':False}
+            firebase.patch('/Characters/'+user+'/Meta',data)
+            rng = random.randint(0,1)
+            print(rng)
+            if rng == 0:
+                #weapon
+                with open('config/items.json') as data_file:
+                    items = json.load(data_file)['Weapons']
+                lst = list(items.keys())
+                rng = random.randint(0,len(lst)-1)
+                wep = items.get(lst[rng])
+                level = firebase.get('/Characters/'+user+'/Meta/level', None)
+                print(wep)
+                print(lst[rng])
+                print(wep.get('power') > level + 2)
+                while wep.get('power') > level + 2 or lst[rng] == 'fists':
+                    print(rng)
+                    rng = (rng+1)%len(lst)
+                    wep = items.get(lst[rng])
+                quantity = 1
+                temp = firebase.get('/Characters/'+user+'/Inventory/'+lst[rng], None)
+                if temp:
+                    quantity = temp + 1
+                data = {lst[rng]:quantity}
+                firebase.patch('/Characters/'+user+'/Inventory/',data)
+                return "You found " + lst[rng]+"!"
+            else:
+                #armor
+                with open('config/items.json') as data_file:
+                    items = json.load(data_file)['Armor']
+                lst = list(items.keys())
+                rng = random.randint(0,len(lst)-1)
+                wep = items.get(lst[rng])
+                level = firebase.get('/Characters/'+user+'/Meta/level',None)
+                print(wep)
+                print(lst[rng])
+                print(wep.get('defense') > level + 2)
+                while wep.get('defense') > level + 2 or lst[rng] == 'naked':
+                    print(rng)
+                    rng = (rng+1)%len(lst)
+                    wep = items.get(lst[rng])
+                quantity = 1
+                temp = firebase.get('/Characters/'+user+'/Inventory/'+lst[rng], None)
+                print(temp)
+                if temp:
+                    quantity = temp + 1
+                data = {lst[rng]:quantity}
+                firebase.patch('/Characters/'+user+'/Inventory/',data)
+                return "You found " + lst[rng]+"!"
+        meta = firebase.get('/Characters/'+user+'/Meta',None)
+        level = meta.get('level')
+        money = meta.get('money')
+        goldrng = random.randint(2*level,5*level)
+        data = {'money':money+goldrng}
+        firebase.patch('/Characters/'+user+'/Meta',data)
+        return "You found " + str(goldrng) + " gold!"
+        
 
 def new_user(name, user):
-    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village','trader': 'general manager'}, 'armor': 'naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5, 'maxhp':10}, 'Inventory': {'soylent': 1}, 'weapon': 'fists'}    
+    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village','trader': 'general manager','hideout':False, 'dropWep':'N/A'}, 'armor': 'naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5, 'maxhp':10}, 'Inventory': {'soylent': 1}, 'weapon': 'fists'}    
     result = firebase.put('/Characters',user,data)
     return "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
 
