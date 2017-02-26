@@ -6,14 +6,17 @@ First, install Python 3.6.x on to your computer.
 Next you will need to import the following:
 <pre><code>pip install python-firebase
 pip install slackclient
-pip install requests</code></pre>
+pip install requests
+pip install markovify</code></pre>
 
 To get the BOT_ID for your Slack Bot you will need to run the following file. Before you run this code, change the Slack Token in line 7 to a slack token you need to create. You can easily create a slack token using: https://api.slack.com/docs/oauth-test-tokens
 <pre><code>python print_bot_id.py</code></pre>
 
-Using the BOT_ID you found using the previous command and the Slack Token you created, set up your bot in your repository.
-<pre><code>export BOT_ID='U4AA1UYN7'
-export SLACK_BOT_TOKEN='xoxb-146341984755-1fYi3Oau3Cx262xcxP3Tzzp0'
+You will need to specify the url for the firebase project you will be using. Using the BOT_ID you found using the previous command and the Slack Token you created, set up your bot in your repository.
+<pre><code>
+export FIREBASE_URL="firebase url"
+export BOT_ID= "bot id"
+export SLACK_BOT_TOKEN="slack bot token"
 </code></pre>
 
 ##List of Commands
