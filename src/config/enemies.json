@@ -1,34 +1,428 @@
 
-  { "memes": [
-        {
-            "name": "Weed Wizard",
-            "power": 420
-        },
-        {
-            "name": "Nightman",
-            "power": 10
-        },
-        {
-            "name": "Chin Chin",
-            "power": 8
-        },
-        {
-            "name": "Salt Bae",
-            "power": 1
-        },
-        {
-            "name":"Ultra Rare Pepe",
-            "power": 5
-        },
-        {
-            "name": "Steel Beams",
-            "power": 10
-        },
-        {
-            "name": "Mr. Negi Generation 3000",
-            "power": 6
-        }
-    ],
+  { "Memetown": {
+      "1":[
+          {
+              "name": "Lance",
+              "power": 1,
+              "health": 1,
+              "min":-1,
+              "max": 0,
+              "crit":0.99,
+              "mod":5
+          }
+      ],
+      "5":[
+          {
+              "name":"Rare Pepe",
+              "power": 5,
+              "health": 15,
+              "min":6,
+              "max":8,
+              "crit":0.10,
+              "mod":2
+          },
+          {
+              "name":"Weed Wizard",
+              "power": 5,
+              "health": 42,
+              "min": 2,
+              "max": 4,
+              "crit": 0.042,
+              "mod":42
+          },
+          {
+              "name":"Salt Bae",
+              "power": 5,
+              "health": 6,
+              "min":6,
+              "max":12,
+              "crit": 0.90,
+              "mod": 2
+          }
+      ],
+      "6":[
+          {
+              "name":"Steel Beam",
+              "power": 6,
+              "health": 37,
+              "min": 9,
+              "max": 11,
+              "crit": 0.42,
+              "mod": 1
+          },
+          {
+              "name":"The Count",
+              "power": 6,
+              "health": 15,
+              "min": 12,
+              "max": 23,
+              "crit": 0.45,
+              "mod": 1
+          },
+          {
+              "name":"Fake Frank",
+              "power": 6,
+              "health": 42,
+              "min": 14,
+              "max": 27,
+              "crit": 0.11,
+              "mod": 2
+          }
+      ],
+      "7":[
+          {
+              "name":"Hackerman",
+              "power": 7,
+              "health": 42,
+              "min": 13,
+              "max": 37,
+              "crit": 0.1337,
+              "mod": 2
+          },
+          {
+              "name":"Dr. Doge",
+              "power": 7,
+              "health": 40,
+              "min": 18,
+              "max": 20,
+              "crit": 0.45,
+              "mod": 2
+          },
+          {
+              "name":"FLOCKA",
+              "power": 7,
+              "health": 48,
+              "min": 1,
+              "max": 42,
+              "crit": 0.11,
+              "mod": 1
+          }
+      ],
+      "8":[
+          {
+              "name":"Wheels",
+              "power": 8,
+              "health": 20,
+              "min": 11,
+              "max": 11,
+              "crit": 0.01,
+              "mod": 100
+          },
+          {
+              "name":"Derek",
+              "power": 8,
+              "health": 23,
+              "min": 12,
+              "max": 24,
+              "crit": 0.45,
+              "mod": 2
+          },
+          {
+              "name":"60's Spiderman",
+              "power": 8,
+              "health": 60,
+              "min": 25,
+              "max": 52,
+              "crit": 0.17,
+              "mod": 2
+          }
+      ],
+      "9":[
+          {
+              "name":"The Troll",
+              "power": 9,
+              "health": 44,
+              "min": 38,
+              "max": 40,
+              "crit": 0.42,
+              "mod": 1
+          },
+          {
+              "name":"Super Rare Pepe",
+              "power": 9,
+              "health": 78,
+              "min": 12,
+              "max": 60,
+              "crit": 0.45,
+              "mod": 1
+          },
+          {
+              "name":"Dark Helmet",
+              "power": 9,
+              "health": 19,
+              "min": 50,
+              "max": 58,
+              "crit": 0.11,
+              "mod": 2
+          }
+      ],
+      "10":[
+          {
+              "name":"Ken Bone",
+              "power": 10,
+              "health": 100,
+              "min": 12,
+              "max": 20,
+              "crit": 0.32,
+              "mod": 2
+          },
+          {
+              "name":"Shrek",
+              "power": 10,
+              "health": 80,
+              "min": 35,
+              "max": 50,
+              "crit": 0.45,
+              "mod": 2
+          },
+          {
+              "name":"Colonel Sanders",
+              "power": 10,
+              "health": 85,
+              "min": 44,
+              "max": 66,
+              "crit": 0.11,
+              "mod": 3
+          }
+      ],
+      "11":[
+          {
+              "name":"Cory in the House",
+              "power": 11,
+              "health": 110,
+              "min": 44,
+              "max": 55,
+              "crit": 0.42,
+              "mod": 0
+          },
+          {
+              "name":"Tapp Brothers",
+              "power": 11,
+              "health": 78,
+              "min": 50,
+              "max": 50,
+              "crit": 0.45,
+              "mod": 2
+          },
+          {
+              "name":"Wali",
+              "power": 11,
+              "health": 23,
+              "min": 56,
+              "max": 70,
+              "crit": 0.11,
+              "mod": 1
+          }
+      ],
+      "12":[
+          {
+              "name":"Martin Shkreli",
+              "power": 12,
+              "health": 140,
+              "min": 60,
+              "max": 80,
+              "crit": 1.0,
+              "mod": 2
+          },
+          {
+              "name":"Hillary Clinton",
+              "power": 12,
+              "health": 100,
+              "min": 40,
+              "max": 90,
+              "crit": 0.3,
+              "mod": 2
+          },
+          {
+              "name":"Legolas",
+              "power": 12,
+              "health": 138,
+              "min": 53,
+              "max": 70,
+              "crit": 0.11,
+              "mod": 2
+          }
+      ],
+      "13":[
+          {
+              "name":"Joe Biden",
+              "power": 13,
+              "health": 170,
+              "min": 68,
+              "max": 93,
+              "crit": 0.1,
+              "mod": 2
+          },
+          {
+              "name":"Spongebob",
+              "power": 13,
+              "health": 200,
+              "min": 12,
+              "max": 100,
+              "crit": 0.45,
+              "mod": 2
+          },
+          {
+              "name":"Dat Boi",
+              "power": 13,
+              "health": 222,
+              "min": 11,
+              "max": 150,
+              "crit": 0.11,
+              "mod": 1
+          }
+      ],
+      "14":[
+          {
+              "name":"Gordon Ramsay",
+              "power": 14,
+              "health": 161,
+              "min": 66,
+              "max": 166,
+              "crit": 0.0,
+              "mod": 1
+          },
+          {
+              "name":"Putin",
+              "power": 14,
+              "health": 244,
+              "min": 55,
+              "max": 121,
+              "crit": 0.45,
+              "mod": 2
+          },
+          {
+              "name":"Simon Cowell",
+              "power": 14,
+              "health": 268,
+              "min": 21,
+              "max": 150,
+              "crit": 0.11,
+              "mod": 0
+          }
+      ],
+      "15":[
+          {
+              "name":"Obama",
+              "power": 15,
+              "health": 300,
+              "min": 5,
+              "max": 10,
+              "crit": 0.01,
+              "mod": 200
+          },
+          {
+              "name":"Jungck",
+              "power": 15,
+              "health": 50,
+              "min": 20,
+              "max": 100,
+              "crit": 0.45,
+              "mod": 4
+          },
+          {
+              "name":"John Cena",
+              "power": 15,
+              "health": 2,
+              "min": 11,
+              "max": 150,
+              "crit": 0.11,
+              "mod": 1
+          }
+      ], 
+      "Memetown":{
+        "Bosses":[
+            {
+                "name":"Edgelord",
+                "power": 1,
+                "health": 10,
+                "min":1,
+                "max":2,
+                "crit":0.01,
+                "mod":2
+            },
+            {
+                "name":"Deadpool",
+                "power": 2,
+                "health": 13,
+                "min":1,
+                "max":3,
+                "crit":0.01,
+                "mod":2
+            },
+            {
+                "name":"Real Frank",
+                "power": 3,
+                "health": 19,
+                "min":2,
+                "max":4,
+                "crit":0.01,
+                "mod":2
+            },
+            {
+                "name":"Tay",
+                "power": 4,
+                "health": 22,
+                "min":3,
+                "max":3,
+                "crit":0.2,
+                "mod":2
+            },
+            {
+                "name":"Division of the Square Root of Two",
+                "power": 5,
+                "health": 25,
+                "min":3,
+                "max":5,
+                "crit":0.1,
+                "mod":2
+            },
+            {
+                "name":"Mr. Negi Generation 3000",
+                "power": 6,
+                "health": 36,
+                "min":4,
+                "max":7,
+                "crit":0.05,
+                "mod":2
+            },
+            {
+                "name":"Roger",
+                "power": 7,
+                "health": 45,
+                "min":4,
+                "max":7,
+                "crit":0.1,
+                "mod":2
+            },
+            {
+                "name":"Stuart",
+                "power": 8,
+                "health": 57,
+                "min":5,
+                "max":9,
+                "crit":0.08,
+                "mod":2
+            },
+            {
+                "name":"Donald J Trump",
+                "power": 9,
+                "health": 75,
+                "min":10,
+                "max":19,
+                "crit":0.2,
+                "mod":2
+            },
+            {
+                "name":"Kevin",
+                "power": 10,
+                "health": 160,
+                "min":13,
+                "max":28,
+                "crit":0.25,
+                "mod":2
+            }
+        ],
     "Dire Village":{
         "Bosses":[
             {
