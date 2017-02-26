@@ -28,8 +28,8 @@ export SLACK_BOT_TOKEN="slack bot token"
 </code></pre>
 
 ## OTHER SOURCES OF DOCUMENTATION
-python-firebase: https://pypi.python.org/pypi/python-firebase/1.2
-slackclient: https://pypi.python.org/pypi/slackclient
+python-firebase: https://pypi.python.org/pypi/python-firebase/1.2<br>
+slackclient: https://pypi.python.org/pypi/slackclient<br>
 markovify: https://github.com/jsvine/markovify
 
 ## Contributor Guide
