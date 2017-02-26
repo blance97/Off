@@ -1,45 +1,5 @@
 
   { "Memetown": {
-      "1":[
-          {
-              "name": "Lance",
-              "power": 1,
-              "health": 1,
-              "min":-1,
-              "max": 0,
-              "crit":0.99,
-              "mod":5
-          }
-      ],
-      "5":[
-          {
-              "name":"Rare Pepe",
-              "power": 5,
-              "health": 15,
-              "min":6,
-              "max":8,
-              "crit":0.10,
-              "mod":2
-          },
-          {
-              "name":"Weed Wizard",
-              "power": 5,
-              "health": 42,
-              "min": 2,
-              "max": 4,
-              "crit": 0.042,
-              "mod":42
-          },
-          {
-              "name":"Salt Bae",
-              "power": 5,
-              "health": 6,
-              "min":6,
-              "max":12,
-              "crit": 0.90,
-              "mod": 2
-          }
-      ],
       "6":[
           {
               "name":"Steel Beam",
@@ -330,108 +290,99 @@
               "mod": 1
           }
       ], 
-      "Memetown":{
-        "Bosses":[
-            {
-                "name":"Edgelord",
-                "power": 5,
-                "health": 40,
-                "min":10,
-                "max":12,
-                "crit":0.05,
-                "mod":2
-            },
-            {
-                "name":"Jake McClure",
-                "power": 6,
-                "health": 58,
-                "min":18,
-                "max":23,
-                "crit":0.07,
-                "mod":3
-            },
-            {
-                "name":"Deadpool",
-                "power": 7,
-                "health": 75,
-                "min":27,
-                "max":33,
-                "crit":0.23,
-                "mod":2
-            },
-            {
-                "name":"Real Frank",
-                "power": 8,
-                "health": 90,
-                "min":49,
-                "max":62,
-                "crit":0.45,
-                "mod":2
-            },
-            {
-                "name":"Tay",
-                "power": 9,
-                "health": 56,
-                "min":79,
-                "max":123,
-                "crit":0.2,
-                "mod":4
-            },
-            {
-                "name":"Division of the Square Root of Two",
-                "power": 10,
-                "health": 222,
-                "min":22,
-                "max":122,
-                "crit":0.22,
-                "mod":2
-            },
-            {
-                "name":"Mr. Negi Generation 3000",
-                "power": 11,
-                "health": 140,
-                "min":100,
-                "max":120,
-                "crit":0.01,
-                "mod":3
-            },
-            {
-                "name":"Roger",
-                "power": 12,
-                "health": 285,
-                "min":121,
-                "max":183,
-                "crit":0.1,
-                "mod":4
-            },
-            {
-                "name":"Stuart",
-                "power": 13,
-                "health": 290,
-                "min":126,
-                "max":188,
-                "crit":0.15,
-                "mod":5
-            },
-            {
-                "name":"Donald J Trump",
-                "power": 14,
-                "health": 400,
-                "min":56,
-                "max":200,
-                "crit":0.2,
-                "mod":3
-            },
-            {
-                "name":"Kevin",
-                "power": 15,
-                "health": 800,
-                "min":200,
-                "max":300,
-                "crit":0.25,
-                "mod":2
-            }
-        ],
+      "Bosses":[
+        {
+            "name":"Jake McClure",
+            "power": 6,
+            "health": 58,
+            "min":18,
+            "max":23,
+            "crit":0.07,
+            "mod":3
+        },
+        {
+            "name":"Deadpool",
+            "power": 7,
+            "health": 75,
+            "min":27,
+            "max":33,
+            "crit":0.23,
+            "mod":2
+        },
+        {
+            "name":"Real Frank",
+            "power": 8,
+            "health": 90,
+            "min":49,
+            "max":62,
+            "crit":0.45,
+            "mod":2
+        },
+        {
+            "name":"Tay",
+            "power": 9,
+            "health": 56,
+            "min":79,
+            "max":123,
+            "crit":0.2,
+            "mod":4
+        },
+        {
+            "name":"Division of the Square Root of Two",
+            "power": 10,
+            "health": 222,
+            "min":22,
+            "max":122,
+            "crit":0.22,
+            "mod":2
+        },
+        {
+            "name":"Mr. Negi Generation 3000",
+            "power": 11,
+            "health": 140,
+            "min":100,
+            "max":120,
+            "crit":0.01,
+            "mod":3
+        },
+        {
+            "name":"Roger",
+            "power": 12,
+            "health": 285,
+            "min":121,
+            "max":183,
+            "crit":0.1,
+            "mod":4
+        },
+        {
+            "name":"Stuart",
+            "power": 13,
+            "health": 290,
+            "min":126,
+            "max":188,
+            "crit":0.15,
+            "mod":5
+        },
+        {
+            "name":"Donald J Trump",
+            "power": 14,
+            "health": 400,
+            "min":56,
+            "max":200,
+            "crit":0.2,
+            "mod":3
+        },
+        {
+            "name":"Kevin",
+            "power": 15,
+            "health": 800,
+            "min":200,
+            "max":300,
+            "crit":0.25,
+            "mod":2
+        }
+    ]
+  },
     "Dire Village":{
         "Bosses":[
             {

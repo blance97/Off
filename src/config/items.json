@@ -267,10 +267,10 @@
                 "saleCost": 1000
             },
             "steel armer": {
-                "defense": 4,
+                "defense": 4,   
                 "saleCost": 60
             }
-    ,
+        },
     "Potions": [
         {
             "name": "Small Health Potion",

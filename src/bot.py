@@ -384,9 +384,15 @@ def handle_command(command, channel, user):
                 goldrng = random.randint(2*level,5*level)
                 data = {'money':money+goldrng}
                 firebase.patch('/Characters/'+user+'/Meta',data)
+                data = {'hideout':True}
+                firebase.patch('/Characters/'+user+'/Meta',data)
                 r1 = gen_loot(2,user)
+                data = {'hideout':True}
+                firebase.patch('/Characters/'+user+'/Meta',data)
                 r2 = gen_loot(2,user)
-                response = "You stumble upon a pile of unguarded treasure! "+ r1 + r2 + " In the back you see a pile of " + goldrng + " gold!"
+                data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "You stumble upon a pile of unguarded treasure! "+ r1 + r2 + " In the back you see a pile of " + str(goldrng) + " gold!"
             else:
                 #nothing
                 response = "You return to the village without anything more happening."
@@ -740,16 +746,18 @@ def get_equipment(weaponName, armorName):
     return weapon, armor
 
 def get_encounter(level, village,encType):
-    weights = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
+    weights = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524,88573,265720,797161,2391484,7174453]
     rng = random.randint(1, weights[level - 1])
     mlvl = 0
-    for i in range(0, 10):
+    for i in range(0, 15):
         if rng <= weights[i]:
             mlvl = i + 1
             break
     with open('config/enemies.json') as data_file:    
         monsters = json.load(data_file)[village]
     if encType=="boss":
+        if mlvl > 10:
+            mlvl = mlvl - 5
         return monsters.get('Bosses')[mlvl-1]
     else:
         monsters = monsters[(str(mlvl))]
