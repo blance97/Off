@@ -22,7 +22,7 @@ EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-slack_client = SlackClient('xoxb-146341984755-RGiblWd6w7vnPLWpvSKXB5kK')
+slack_client = SlackClient('xoxb-146341984755-H6d5p6Rm2Ci8ws0U4s4RDL13')
 
 
 def handle_command(command, channel, user):
@@ -115,8 +115,12 @@ def handle_command(command, channel, user):
         curPoints = int(firebase.get('/Characters/'+user+'/Attributes/AllocationPoints',None))
         if attr not in ('charisma','dexterity','strength','intelligence','luck'):
             response = "Invalid attribute"
-        elif curPoints < abs(points):
+        elif curPoints < abs(points) or points < 0:
             response = "Invalid point amount"
+        elif curPoints + points > 15:
+            print(curPoints)
+            print(points)
+            response = "Max 15 points are allowed per attribute"
         else:
             data = {attr:points, 'AllocationPoints':curPoints-points}
             firebase.patch('/Characters/'+user+'/Attributes',data)
@@ -161,7 +165,7 @@ def handle_command(command, channel, user):
             else:
                 level = int(meta.get('level'))
                 village = meta.get('location')
-                monster = get_encounter(level,village)
+                monster = get_encounter(level,village,"normal")
                 data = {'battle':monster, 'enemyHp':monster['health'], 'stage':1}
                 firebase.patch('/Characters/'+user+'/Meta',data)
                 response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
@@ -176,7 +180,7 @@ def handle_command(command, channel, user):
                 #Regular encounter
                 level = int(meta.get('level'))
                 village = meta.get('location')
-                monster = get_encounter(level,village)
+                monster = get_encounter(level,village,"normal")
                 data = {'battle':monster, 'enemyHp':monster['health']}
                 firebase.patch('/Characters/'+user+'/Meta',data)
                 response = "You encountered a "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
@@ -184,7 +188,7 @@ def handle_command(command, channel, user):
                 #Hideout
                 level = int(meta.get('level'))
                 village = meta.get('location')
-                monster = get_encounter(level,village)
+                monster = get_encounter(level,village,"normal")
                 data = {'battle':monster, 'enemyHp':monster['health'], 'hideout':True}
                 firebase.patch('/Characters/'+user+'/Meta',data)
                 response = "You come upon the " + monster['name'] + " hideout and are attacked by one of them with "+ str(monster['health'])+" health. Use attack or flee."
@@ -192,7 +196,7 @@ def handle_command(command, channel, user):
                 #Trap
                 level = int(meta.get('level'))
                 village = meta.get('location')
-                monster = get_encounter(level,village)
+                monster = get_encounter(level,village,"normal")
                 weaponName = firebase.get('/Characters/'+user+'/weapon', None)
                 if weaponName != "fists":
                     data = {'battle':monster, 'enemyHp':monster['health'], 'dropWep':weaponName}
@@ -227,7 +231,7 @@ def handle_command(command, channel, user):
                 #boss battle
                 level = int(meta.get('level'))
                 village = meta.get('location')
-                monster = get_encounter(level,village)
+                monster = get_encounter(level,village,"boss")
                 data = {'battle':monster, 'enemyHp':monster['health']}
                 firebase.patch('/Characters/'+user+'/Meta',data)
                 response = "Up ahead you see a castle, inside you encounter "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
@@ -265,6 +269,23 @@ def handle_command(command, channel, user):
         exp = firebase.get('/Characters/'+user+'/Meta/exp',None)
         ap = firebase.get('/Characters/'+user+'/Attributes/AllocationPoints',None)
         response="You have " + str(exp) + " experience points! You have " + str(ap) + " skill points to spend!"
+    elif command.startswith("travel"):
+        meta = firebase.get('/Characters/'+user+'/Meta',None)
+        level = meta.get('level')
+        bossKill = meta.get('bossKill')
+        location = meta.get('location')
+        if level < 5 or not bossKill:
+            response = "You must be level 5 and have defeated a boss to travel"
+        else:
+            if location == 'Dire Village':
+                data = {'location':'Memetown'}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "You are now at Memetown, land of the dankest of memes"
+            else:
+                data = {'location':'Dire Village'}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "Welcome back to Dire Village"
+
     elif command.startswith("wield"):
         item = command[6:]
         with open('config/items.json') as data_file:
@@ -337,8 +358,8 @@ def handle_command(command, channel, user):
                             firebase.patch('/Characters/'+user+'/Inventory',data)
 
                     curXP = character.get('Meta').get('exp')
-                    exps = [5,7,10,14,19,25,32,40,49,60]
-                    goals = [15, 43, 83, 153, 253, 400, 650, 1050, 1550, 2500]
+                    exps = [5,7,10,14,19,25,32,40,49,59,70,82,95,109,124]
+                    goals = [15, 43, 83, 153, 253, 400, 650, 1050, 1550, 2500, 4000, 6000, 9000, 13000, 18000]
                     gain = exps[monster.get('power')-1]
                     if stage==3:
                         gain = gain * 2
@@ -370,8 +391,8 @@ def handle_command(command, channel, user):
                         firebase.patch('/Characters/'+user+'/Meta',data)
                     else:
                         #Beat the boss
-                        response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +"You are currently at "+str(health) + " health. "+ response
-                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                        response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +" You are currently at "+str(health) + " health. "+ response
+                        data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'bossKill':True}
                         firebase.patch('/Characters/'+user+'/Meta',data)
                         #####
                         #Find new town
@@ -406,8 +427,8 @@ def handle_command(command, channel, user):
                                 firebase.patch('/Characters/'+user+'/Inventory',data)
                                 
                         curXP = character.get('Meta').get('exp')
-                        exps = [5,7,10,14,19,25,32,40,49,60]
-                        goals = [15, 43, 83, 153, 253, 400, 650, 1050, 1550, 2500]
+                        exps = [5,7,10,14,19,25,32,40,49,59,70,82,95,109,124]
+                        goals = [15, 43, 83, 153, 253, 400, 650, 1050, 1550, 2500, 4000, 6000, 9000, 13000, 18000]
                         gain = exps[monster.get('power')-1]
                         if stage==3:
                             gain = gain * 2
@@ -439,8 +460,8 @@ def handle_command(command, channel, user):
                             firebase.patch('/Characters/'+user+'/Meta',data)
                         else:
                             #Beat the boss
-                            response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +"You are currently at "+str(health) + " health. "+ response
-                            data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                            response = "You dealt "+str(heroDmg)+" and beat " + monster.get('name') +" You are currently at "+str(health) + " health. "+ response
+                            data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'bossKill':True}
                             firebase.patch('/Characters/'+user+'/Meta',data)
                             #####
                             #Find new town
@@ -564,7 +585,7 @@ def gen_loot(stage,user):
         
 
 def new_user(name, user):
-    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village','trader': 'general manager','hideout':False, 'dropWep':'N/A'}, 'armor': 'naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5, 'maxhp':10}, 'Inventory': {'soylent': 1}, 'weapon': 'fists'}    
+    data = {'Name':name, 'Meta':{'level':1, 'exp':0, 'money':0, 'battle':'N/A', 'enemyHp':'N/A', 'stage':0, 'location':'Dire Village','trader': 'general manager','hideout':False, 'dropWep':'N/A', 'bossKill':False}, 'armor': 'naked', 'Attributes': {'charisma': 0, 'dexterity': 0, 'health': 10, 'intelligence': 0, 'luck': 0, 'strength': 0, 'AllocationPoints':5, 'maxhp':10}, 'Inventory': {'soylent': 1}, 'weapon': 'fists'}    
     result = firebase.put('/Characters',user,data)
     return "You, "+name+", wake up on the floor of the tavern, extremely hungover, with not a penny to your name. What would you like to do?"
 
@@ -577,7 +598,7 @@ def get_equipment(weaponName, armorName):
     armor = armors.get(armorName)
     return weapon, armor
 
-def get_encounter(level, village):
+def get_encounter(level, village,encType):
     weights = [1, 4, 13, 40, 121, 364, 1093, 3280, 9841, 29524]
     rng = random.randint(1,weights[level-1])
     mlvl = 0
@@ -586,9 +607,13 @@ def get_encounter(level, village):
             mlvl=i+1
             break
     with open('config/enemies.json') as data_file:    
-        monsters = json.load(data_file)[village][(str(mlvl))]
-    rng = random.randint(0,len(monsters)-1)
-    return monsters[rng]
+        monsters = json.load(data_file)[village]
+    if encType=="boss":
+        return monsters.get('Bosses')[mlvl-1]
+    else:
+        monsters = monsters[(str(mlvl))]
+        rng = random.randint(0,len(monsters)-1)
+        return monsters[rng]
 
 def parse_slack_output(slack_rtm_output):
     """
