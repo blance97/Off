@@ -30,6 +30,98 @@
         }
     ],
     "Dire Village":{
+        "Bosses":[
+            {
+                "name":"Ghost King",
+                "power": 1,
+                "health": 10,
+                "min":1,
+                "max":2,
+                "crit":0.01,
+                "mod":2
+            },
+            {
+                "name":"Spider Queen",
+                "power": 2,
+                "health": 13,
+                "min":1,
+                "max":3,
+                "crit":0.01,
+                "mod":2
+            },
+            {
+                "name":"Lizard Lord",
+                "power": 3,
+                "health": 19,
+                "min":2,
+                "max":4,
+                "crit":0.01,
+                "mod":2
+            },
+            {
+                "name":"Vampire Count",
+                "power": 4,
+                "health": 22,
+                "min":3,
+                "max":3,
+                "crit":0.2,
+                "mod":2
+            },
+            {
+                "name":"Skeleton Knight",
+                "power": 5,
+                "health": 25,
+                "min":3,
+                "max":5,
+                "crit":0.1,
+                "mod":2
+            },
+            {
+                "name":"Outlaw Leader",
+                "power": 6,
+                "health": 36,
+                "min":4,
+                "max":7,
+                "crit":0.05,
+                "mod":2
+            },
+            {
+                "name":"Goblin King",
+                "power": 7,
+                "health": 45,
+                "min":4,
+                "max":7,
+                "crit":0.1,
+                "mod":2
+            },
+            {
+                "name":"Morgoth the Archdemon",
+                "power": 8,
+                "health": 57,
+                "min":5,
+                "max":9,
+                "crit":0.08,
+                "mod":2
+            },
+            {
+                "name":"Necromancer",
+                "power": 9,
+                "health": 75,
+                "min":10,
+                "max":19,
+                "crit":0.2,
+                "mod":2
+            },
+            {
+                "name":"Ancalagon the Black Dragon",
+                "power": 10,
+                "health": 160,
+                "min":13,
+                "max":28,
+                "crit":0.25,
+                "mod":2
+            }
+        ],
         "1":[
             {
                 "name":"Bat",

@@ -63,6 +63,9 @@ Changes your current armor to another specified armor in your inventory.
 <li>tradelist:<code>@Bot tradelist</code>
   This will shows the items the general manager has to sell in the town.
 </li>
+<li>travel:<code>@Bot travel</code> 
+Allows you to travel to another town with different enemies. This command is unlocked after defeating a boss and achieving level 5.
+</li>
 <li>wield:<code>@Bot wield weapon</code>
   Changes your current weapon to another specified weapon in your inventory.
 </li>
