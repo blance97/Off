@@ -63,7 +63,7 @@ Changes your current armor to another specified armor in your inventory.
 <li>tradelist:<code>@Bot tradelist</code>
   This will shows the items the general manager has to sell in the town.
 </li>
-<li>weild:<code>@Bot weild weapon</code>
+<li>wield:<code>@Bot wield weapon</code>
   Changes your current weapon to another specified weapon in your inventory.
 </li>
 <li>whereami:<code>@Bot whereami</code>
