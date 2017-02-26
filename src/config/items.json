@@ -176,7 +176,48 @@
                 "crit": 0.12,
                 "mod": 2,
                 "saleCost": 15
+            },
+            "Ass Pounder 4000":{
+                 "power": 50,
+                "min": 10,
+                "max": 40,
+                "crit": 0.5,
+                "mod": 2,
+                "saleCost": 9000
+            },
+            "Ass Pounder 5000":{
+                 "power": 12,
+                "min": 10,
+                "max": 50,
+                "crit": 0.6,
+                "mod": 2,
+                "saleCost": 9000
+            },
+            "Golden Pepe":{
+                 "power":13,
+                "min": 30,
+                "max": 50,
+                "crit": 0.5,
+                "mod": 0.5,
+                "saleCost": 100
+            },
+            "Little Trump":{
+                 "power": 14,
+                "min": 10,
+                "max": 16,
+                "crit": 1,
+                "mod": 1.5,
+                "saleCost": 3
+            },
+            "Ass Pounder 420":{
+                 "power": 15,
+                "min": 2000,
+                "max": 3000,
+                "crit": 1,
+                "mod": 10,
+                "saleCost": 0
             }
+
         }
     ,
     "Armor": 
