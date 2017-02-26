@@ -177,44 +177,44 @@
                 "mod": 2,
                 "saleCost": 15
             },
-            "Ass Pounder 4000":{
-                 "power": 50,
-                "min": 10,
-                "max": 40,
-                "crit": 0.5,
+            "clinton emails":{
+                "power":11,
+                "min": 17,
+                "max": 30,
+                "crit": 0.3,
                 "mod": 2,
-                "saleCost": 9000
-            },
-            "Ass Pounder 5000":{
-                 "power": 12,
-                "min": 10,
-                "max": 50,
-                "crit": 0.6,
-                "mod": 2,
-                "saleCost": 9000
-            },
-            "Golden Pepe":{
-                 "power":13,
-                "min": 30,
-                "max": 50,
-                "crit": 0.5,
-                "mod": 0.5,
                 "saleCost": 100
             },
-            "Little Trump":{
+            "putins bear":{
+                "power":12,
+                "min": 20,
+                "max": 35,
+                "crit": 0.4,
+                "mod": 2,
+                "saleCost": 100
+            },
+            "golden pepe":{
+                "power":13,
+                "min": 30,
+                "max": 50,
+                "crit": 0.3,
+                "mod": 2,
+                "saleCost": 100
+            },
+            "little trump":{
                  "power": 14,
                 "min": 10,
                 "max": 16,
-                "crit": 1,
-                "mod": 1.5,
+                "crit": 0.9,
+                "mod": 4,
                 "saleCost": 3
             },
-            "Ass Pounder 420":{
-                 "power": 15,
-                "min": 2000,
-                "max": 3000,
-                "crit": 1,
-                "mod": 10,
+            "soylent grenade":{
+                "power": 15,
+                "min": 50,
+                "max": 65,
+                "crit": 0.01,
+                "mod": 100,
                 "saleCost": 0
             }
 
@@ -228,29 +228,48 @@
             },
             "leather": {
                 "defense": 1,
-                "saleCost": 1
+                "saleCost": 5
             },
             "mithril": {
                 "defense": 10,
-                "saleCost": 10
+                "saleCost": 300
             },
             "chain mail": {
                 "defense": 6,
-                "saleCost": 6
+                "saleCost": 100
             },
             "royal armor": {
                 "defense": 9,
-                "saleCost": 9
+                "saleCost": 200
             },
             "plate armor": {
                 "defense": 2,
-                "saleCost": 2
+                "saleCost": 20
+            },
+            "steel beam plate": {
+                "defense": 11,
+                "saleCost": 360
+            },
+            "stormtrooper armor": {
+                "defense": 12,
+                "saleCost": 400
+            },
+            "diamond armor": {
+                "defense": 13,
+                "saleCost": 500
+            },
+            "dank plate": {
+                "defense": 14,
+                "saleCost": 600
+            },
+            "memor": {
+                "defense": 15,
+                "saleCost": 1000
             },
             "steel armer": {
                 "defense": 4,
-                "saleCost": 4
+                "saleCost": 60
             }
-        }
     ,
     "Potions": [
         {
@@ -267,6 +286,16 @@
             "name": "Large Health Potion",
             "power": 20,
             "saleCost": 15
+        },
+        {
+            "name": "Jet Fuel",
+            "power": 50,
+            "saleCost": 30
+        },
+        {
+            "name": "Wolf Cola",
+            "power": 75,
+            "saleCost": 35
         },
         {
             "name": "Soylent",
