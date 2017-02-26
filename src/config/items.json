@@ -214,17 +214,17 @@
     "Potions": [
         {
             "name": "Small Health Potion",
-            "power": 1,
+            "power": 5,
             "saleCost": 5
         },
         {
             "name": "Medium Health Potion",
-            "power": 5,
+            "power": 10,
             "saleCost": 10
         },
         {
             "name": "Large Health Potion",
-            "power": 10,
+            "power": 20,
             "saleCost": 15
         },
         {

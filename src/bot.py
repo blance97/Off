@@ -138,6 +138,9 @@ def handle_command(command, channel, user):
             response="You're on an adventure near the town of " + location
         else:
             response = "You're in the town of "+location
+    elif command.startswith("inventory"):
+        inv = firebase.get('/Characters/'+user+'/Inventory', None)
+        response = inv
     elif command.startswith("adventure"):
         meta = firebase.get('/Characters/'+user+'/Meta', None)
         stage = meta.get('stage')
@@ -215,6 +218,35 @@ def handle_command(command, channel, user):
                         data = {'health':health}
                         firebase.patch('/Characters/'+user+'/Attributes',data)
                         response = "Walking through the area, you fall into a " + monster['name'] + " trap! You fall and lose "+str(level)+" health! You currently have "+str(health)+" health. A " + monster['name']+ " with " + str(monster['health']) +" charges at you."
+        elif stage==2:
+            data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':3}
+            firebase.patch('/Characters/'+user+'/Meta',data)
+            rng = random.randint(0,100)
+            print(rng)
+            if rng <= 70:
+                #boss battle
+                level = int(meta.get('level'))
+                village = meta.get('location')
+                monster = get_encounter(level,village)
+                data = {'battle':monster, 'enemyHp':monster['health']}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                response = "Up ahead you see a castle, inside you encounter "+monster['name']+" with "+ str(monster['health'])+" health. Use attack or flee."
+            elif rng <= 85:
+                #unguarded treasure
+                meta = firebase.get('/Characters/'+user+'/Meta',None)
+                level = meta.get('level')
+                money = meta.get('money')
+                goldrng = random.randint(2*level,5*level)
+                data = {'money':money+goldrng}
+                firebase.patch('/Characters/'+user+'/Meta',data)
+                r1 = gen_loot(2,user)
+                r2 = gen_loot(2,user)
+                response = "You stumble upon a pile of unguarded treasure! "+ r1 + r2 + " In the back you see a pile of " + goldrng + " gold!"
+            else:
+                #nothing
+                response = "You return to the village without anything more happening."
+                data = {'battle':'N/A', 'enemyHp':'N/A', 'stage':0}
+                firebase.patch('/Characters/'+user+'/Meta',data)
 
     elif command.startswith("flee"):
         stage = firebase.get('/Characters/'+user+'/Meta/stage',None)
@@ -229,8 +261,10 @@ def handle_command(command, channel, user):
                 response = "You escaped safely back to " + firebase.get('/Characters/'+user+'/Meta/location',None)
         else:
             response = "You're already at the village!"
-    elif command.startswith("loot"):
-        response=gen_loot(2,user)
+    elif command.startswith("exp"):
+        exp = firebase.get('/Characters/'+user+'/Meta/exp',None)
+        ap = firebase.get('/Characters/'+user+'/Attributes/AllocationPoints',None)
+        response="You have " + str(exp) + " experience points! You have " + str(ap) + " skill points to spend!"
     elif command.startswith("wield"):
         item = command[6:]
         with open('config/items.json') as data_file:
@@ -302,6 +336,27 @@ def handle_command(command, channel, user):
                             data = {temp:quantity+1}
                             firebase.patch('/Characters/'+user+'/Inventory',data)
 
+                    curXP = character.get('Meta').get('exp')
+                    exps = [5,7,10,14,19,25,32,40,49,60]
+                    goals = [15, 43, 83, 153, 253, 400, 650, 1050, 1550, 2500]
+                    gain = exps[monster.get('power')-1]
+                    if stage==3:
+                        gain = gain * 2
+                    curXP = curXP + gain
+                    curLevel = character.get('Meta').get('level')
+                    data = {'exp':curXP}
+                    firebase.patch('/Characters/'+user+'/Meta',data)
+                    if curXP >= goals[curLevel-1]:
+                        #Level up
+                        data = {'level':curLevel+1}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        ap = character.get('Attributes').get('AllocationPoints')
+                        maxhp = character.get('Attributes').get('maxhp')
+                        data = {'AllocationPoints':ap+5, 'health':maxhp+10, 'maxhp':maxhp+10}
+                        firebase.patch('/Characters/'+user+'/Attributes',data)
+                        slack_client.api_call("chat.postMessage", channel=channel,
+                            text="You've leveled up to level "+str(curLevel+1)+"! Use allocate to spend your skill points!", as_user=True)
+
                     response = gen_loot(stage,user)
                     if stage == 1:
                         #Beat stage 1
@@ -310,10 +365,6 @@ def handle_command(command, channel, user):
                         firebase.patch('/Characters/'+user+'/Meta',data)
                     elif stage == 2:
                         #Beat stage 2
-                        print(str(heroDmg))
-                        print(monster.get('name'))
-                        print(str(health))
-                        print(response)
                         response = "You dealt " +str(heroDmg)+ " damage and killed the " + monster.get('name') +"! You are currently at "+str(health) + " health. "+ response + " Continue your adventure by saying 'adventure'"
                         data = {'battle':'N/A', 'enemyHp':'N/A'}
                         firebase.patch('/Characters/'+user+'/Meta',data)
@@ -354,6 +405,27 @@ def handle_command(command, channel, user):
                                 data = {temp:quantity+1}
                                 firebase.patch('/Characters/'+user+'/Inventory',data)
                                 
+                        curXP = character.get('Meta').get('exp')
+                        exps = [5,7,10,14,19,25,32,40,49,60]
+                        goals = [15, 43, 83, 153, 253, 400, 650, 1050, 1550, 2500]
+                        gain = exps[monster.get('power')-1]
+                        if stage==3:
+                            gain = gain * 2
+                        curXP = curXP + gain
+                        curLevel = character.get('Meta').get('level')
+                        data = {'exp':curXP}
+                        firebase.patch('/Characters/'+user+'/Meta',data)
+                        if curXP >= goals[curLevel-1]:
+                            #Level up
+                            data = {'level':curLevel+1}
+                            firebase.patch('/Characters/'+user+'/Meta',data)
+                            ap = character.get('Attributes').get('AllocationPoints')
+                            maxhp = character.get('Attributes').get('maxhp')
+                            data = {'AllocationPoints':ap+5, 'health':maxhp+10, 'maxhp':maxhp+10}
+                            firebase.patch('/Characters/'+user+'/Attributes',data)
+                            slack_client.api_call("chat.postMessage", channel=channel,
+                                text="You've leveled up to level "+str(curLevel+1)+"! Use allocate to spend your skill points!", as_user=True)
+
                         response = gen_loot(stage,user)
                         if stage == 1:
                             #Beat stage 1
@@ -481,6 +553,14 @@ def gen_loot(stage,user):
         data = {'money':money+goldrng}
         firebase.patch('/Characters/'+user+'/Meta',data)
         return "You found " + str(goldrng) + " gold!"
+    elif stage==3:
+        meta = firebase.get('/Characters/'+user+'/Meta',None)
+        level = meta.get('level')
+        money = meta.get('money')
+        goldrng = random.randint(10*level,15*level)
+        data = {'money':money+goldrng}
+        firebase.patch('/Characters/'+user+'/Meta',data)
+        return "You found a massive treasure trove of " + str(goldrng) + " gold!"
         
 
 def new_user(name, user):
@@ -532,10 +612,11 @@ if __name__ == "__main__":
         while True:
             stuff = parse_slack_output(slack_client.rtm_read())
             if stuff[0] and stuff[1] and stuff[2]:
-                print(stuff[0])
-                #print(stuff[1])
-                #print(stuff[2])
-                handle_command(stuff[0], stuff[1], stuff[2])
+                if stuff[2] != 'U4AD0NJ8L':
+                    print(stuff[0])
+                    #print(stuff[1])
+                    #print(stuff[2])
+                    handle_command(stuff[0], stuff[1], stuff[2])
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
