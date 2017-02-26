@@ -254,13 +254,12 @@ def handle_command(command, channel, user):
         points = int(stuff[2])
         curPoints = int(firebase.get('/Characters/' + user +
                                      '/Attributes/AllocationPoints', None))
+        attrPoints = int(firebase.get('/Characters/' + user + '/Attributes/'+attr, None))
         if attr not in ('charisma', 'dexterity', 'strength', 'intelligence', 'luck'):
             response = "Invalid attribute"
         elif curPoints < abs(points) or points < 0:
             response = "Invalid point amount"
-        elif curPoints + points > 15:
-            print(curPoints)
-            print(points)
+        elif attrPoints + points > 15:
             response = "Max 15 points are allowed per attribute"
         else:
             data = {attr: points, 'AllocationPoints': curPoints - points}
