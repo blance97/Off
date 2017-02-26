@@ -2,14 +2,10 @@
 
 ## Welcome contributors to the project: 
 Off is a text-based rpg game on the messaging client Slack. We invite anyone to look at and contribute to our project. We would be grateful for any contributions and advise you are willing to give.
-## Short Links to Important Resources:
-* docs: handbook / roadmap (you'll learn more about this in the roadmapping session)
-* bugs: issue tracker / bug report tool
-* communcations: forum link, developer list, IRC/email, Slack, etc.
 ## Testing
-We tested our game ourselves, trying to find different bugs in the game. It is very helpful to edit the code during testing, so you can advance to higher levels faster.
+We tested our game ourselves, trying to find different bugs in the game. It is very helpful to edit the code during testing, so you can advance to higher levels faster. Testing might feel tedious, but remeber that the game is supposed to be fun.
 ## Development environment details
-This project was created during HackIllinois 2017.
+This project was created during HackIllinois 2017. We created this because we really enjoyed the idea of having an RPG in Slack.
 
 ## How to submit changes: Pull Request protocol etc. 
 We will review your pull requests and contact you before accepting them. It would be best for your interests to fork this project when you work on it. We ask you to give proper recognition if you do use our model.
@@ -21,11 +17,11 @@ We will review your pull requests and contact you before accepting them. It woul
   * There might be some null values in our Markov Chains, we worked around this, but were not able to fix it.
     
 ## New Feature Requirements
-The feature should fit into the themes of our game. The formatting of JSON and the scheme of our database should not dramatically change. Please do not touch our Markov Chians, they are intentionally bad to fit with our theme.
+The feature should fit into the themes of our game. The formatting of JSON and the scheme of our database should not dramatically change. Please do not touch our Markov Chians, they are intentionally bad to fit with our theme. Overall, just have fun with working on this project, because that is it's purpose.
 
 ## Style Guide / Coding conventions 
 New commands should be added with using the current conventions we have implemented into bot.py.
-All items should be kept in items.JSON, but seperated by the specific type of items. 
+All items should be kept in items.JSON, but seperated by the specific type of items.  Similarly, all the enemies should be kept in enemies.JSON, where they are seperated 
 
 ## Code of Conduct
 Refrain from using too much explicit content. Please be patient with our team, we are students, meaning we don't have time.
