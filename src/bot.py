@@ -22,7 +22,7 @@ EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-slack_client = SlackClient('xoxb-146341984755-RGiblWd6w7vnPLWpvSKXB5kK')
+slack_client = SlackClient('xoxb-146341984755-A3A7fjqsQ3v4Cj28DSgVughA')
 
 
 def handle_command(command, channel, user):
@@ -273,7 +273,7 @@ def handle_command(command, channel, user):
         money = firebase.get('/Characters/' + user + '/Meta/money', None)
         response = "You have " + str(money) + " gold."
     elif command.startswith("help"):
-        response = "/***********************************************************\n The commands: \n  adventure--- Starts a new adventure \n allocate--- spend attribute points on skils \n stats--- lists current attribute points an other character data \n money--- lists the amount of money you have \n whereami--- prints out the current location of character \n flee--- run from adventure \n attack--- attacks when on adventure"
+        response = "/***********************************************************\n The commands: \n  adventure--- Starts a new adventure \n allocate--- spend attribute points on skils \n stats--- lists current attribute points an other character data \n attack--- If your character is in an encounter with an enemy, this command will allow you to start attacking. In each attack, both the character and the enemy will attack in an order decided on by luck. \n buy--- Use buy to purchase items from the general manager in the village. \n drink--- Use this command to drink potions to increase your character's health. \n equip---  Changes your current armor to another specified armor in your inventory.\n exp--- Allows you to see your experience points and allocation points. \n flee--- If your character has encountered an enemy, this command will allow you to flee back to the village. By doing this, you will be reset back to stage 0 or your current adventure. \n help--- This command will print a list of all commands you can use in the game. \n inventory---  Allows you to see all the items in your invetory.\n money--- This will return the amount of money you currently have in your inventory. \n newChar ---  Creates a new character for your username. Each Slack user can have multiple characters, each is stored in firebase with it's information. \n Sell--- This allows you to sell an item from your inventory to the general manager in the village. \n stats--- Will display your character's attributes.\n tradelist--- This will shows the items the general manager has to sell in the town.\n wield--- Changes your current weapon to another specified weapon in your inventory.\n whereami--- Tells you which village you had previously visited. This also specifies the pack of enemies in this area."
     elif command.startswith("whereami"):
         meta = firebase.get('/Characters/' + user + '/Meta', None)
         location = meta.get('location')
@@ -757,8 +757,8 @@ if __name__ == "__main__":
         while True:
             stuff = parse_slack_output(slack_client.rtm_read())
             if stuff[0] and stuff[1] and stuff[2]:
-                if stuff[2] != 'U4AD0NJ8L':
-                    print(stuff[0])
+                # if stuff[2] != 'U4AD0NJ8L':
+                    # print(stuff[0])
                     #print(stuff[1])
                     #print(stuff[2])
                     handle_command(stuff[0], stuff[1], stuff[2])
